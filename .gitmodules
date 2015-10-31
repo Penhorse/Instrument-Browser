@@ -1,0 +1,3 @@
+[submodule "submodules/ismsnoop"]
+	path = submodules/ismsnoop
+	url = psh:repos/ismsnoop
