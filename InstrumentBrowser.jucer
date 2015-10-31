@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="RuXVlW" name="InstrumentBrowser" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.InstrumentBrowser" includeBinaryInAppConfig="1"
+              jucerVersion="3.2.0">
+  <MAINGROUP id="sHgRtS" name="InstrumentBrowser">
+    <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
+    <GROUP id="{1BA1119E-6D18-D329-CC72-E5B92F0F502B}" name="Source">
+      <FILE id="wleOnX" name="ISMSnoopWrapper.cpp" compile="1" resource="0"
+            file="Source/ISMSnoopWrapper.cpp"/>
+      <FILE id="h3huct" name="ISMSnoopWrapper.h" compile="0" resource="0"
+            file="Source/ISMSnoopWrapper.h"/>
+      <FILE id="IRxZrr" name="Instrument.cpp" compile="1" resource="0" file="Source/Instrument.cpp"/>
+      <FILE id="YsDUUU" name="Instrument.h" compile="0" resource="0" file="Source/Instrument.h"/>
+      <FILE id="skPoi7" name="InstrumentReceiver.h" compile="0" resource="0"
+            file="Source/InstrumentReceiver.h"/>
+      <FILE id="p1ZDWf" name="InstrumentIcon.cpp" compile="1" resource="0"
+            file="Source/InstrumentIcon.cpp"/>
+      <FILE id="OIRIhe" name="InstrumentIcon.h" compile="0" resource="0"
+            file="Source/InstrumentIcon.h"/>
+      <FILE id="wP39j4" name="InstrumentViewer.cpp" compile="1" resource="0"
+            file="Source/InstrumentViewer.cpp"/>
+      <FILE id="RYE7bE" name="InstrumentViewer.h" compile="0" resource="0"
+            file="Source/InstrumentViewer.h"/>
+      <FILE id="vqTE6g" name="InstrumentLoader.cpp" compile="1" resource="0"
+            file="Source/InstrumentLoader.cpp"/>
+      <FILE id="axuROp" name="InstrumentLoader.h" compile="0" resource="0"
+            file="Source/InstrumentLoader.h"/>
+      <FILE id="o9DP4n" name="OptionsComponent.cpp" compile="1" resource="0"
+            file="Source/OptionsComponent.cpp"/>
+      <FILE id="aOdGHB" name="OptionsComponent.h" compile="0" resource="0"
+            file="Source/OptionsComponent.h"/>
+      <FILE id="lVpo0A" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="Q3yS8e" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="prOSOR" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="InstrumentBrowser"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="InstrumentBrowser"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_events" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_graphics" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_data_structures" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_cryptography" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_video" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_opengl" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="E:/juce/modules"/>
+      </MODULEPATHS>
+    </VS2015>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
