@@ -3,7 +3,6 @@
 #include <sstream>
 #include <rtw/dynamic_library.hpp>
 
-#include "InstrumentLoader.h"
 #include "ISMSnoopWrapper.h"
 
 //==============================================================================
@@ -106,13 +105,14 @@ void MainContentComponent::reload_instruments()
 		directories.add(directory);
 	}
 	
-	InstrumentLoader loader(directories, ismsnoop, &instrument_viewer_);
+	instrument_loader_ = std::make_unique<InstrumentLoader>(directories, ismsnoop, &instrument_viewer_);
 
-	loader.run();
+	instrument_loader_->run();
 }
 
 void MainContentComponent::handle_options_changed()
 {
+	instrument_viewer_.refresh_instruments();
 	reload_instruments();
 }
 

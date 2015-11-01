@@ -4,6 +4,7 @@
               bundleIdentifier="com.yourcompany.InstrumentBrowser" includeBinaryInAppConfig="1"
               jucerVersion="3.2.0">
   <MAINGROUP id="sHgRtS" name="InstrumentBrowser">
+    <FILE id="On1c5m" name="instrument.png" compile="0" resource="1" file="Resources/Icons/instrument.png"/>
     <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
     <GROUP id="{1BA1119E-6D18-D329-CC72-E5B92F0F502B}" name="Source">
       <FILE id="wleOnX" name="ISMSnoopWrapper.cpp" compile="1" resource="0"
@@ -45,27 +46,19 @@
                        isDebug="0" optimisation="3" targetName="InstrumentBrowser"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_video" path="../../juce"/>
-        <MODULEPATH id="juce_opengl" path="../../juce"/>
-        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
-        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
-        <MODULEPATH id="juce_graphics" path="../../juce"/>
-        <MODULEPATH id="juce_events" path="../../juce"/>
-        <MODULEPATH id="juce_data_structures" path="../../juce"/>
-        <MODULEPATH id="juce_cryptography" path="../../juce"/>
-        <MODULEPATH id="juce_core" path="../../juce"/>
-        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
-        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
-        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
-        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+        <MODULEPATH id="juce_video" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_opengl" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_graphics" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_events" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_data_structures" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_cryptography" path="E:\juce\modules"/>
+        <MODULEPATH id="juce_core" path="E:\juce\modules"/>
       </MODULEPATHS>
     </VS2015>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>

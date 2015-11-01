@@ -27,6 +27,7 @@ bool ISMSnoopWrapper::load()
 	if (!(close = library_.get_function<Sig_ismsnoop_close>("ismsnoop_close"))) return false;
 	if (!(get_panel_icon_size = library_.get_function<Sig_ismsnoop_get_panel_icon_size>("ismsnoop_get_panel_icon_size"))) return false;
 	if (!(get_panel_icon_bytes = library_.get_function<Sig_ismsnoop_get_panel_icon_bytes>("ismsnoop_get_panel_icon_bytes"))) return false;
+	if (!(get_name = library_.get_function<Sig_ismsnoop_get_name>("ismsnoop_get_name"))) return false;
 
 	return true;
 }

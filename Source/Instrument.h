@@ -24,6 +24,7 @@ struct Instrument
 	};
 
 	std::string path;
+	std::string name;
 	Icon icon;
 };
 

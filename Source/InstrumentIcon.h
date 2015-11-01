@@ -18,6 +18,27 @@
 //==============================================================================
 /*
 */
+class InstrumentButton : public ImageButton
+{
+
+public:
+
+	InstrumentButton(File file) :
+		file_(file)
+	{
+		// nothing
+	}
+
+	void clicked() override
+	{
+		file_.startAsProcess();
+	}
+
+private:
+
+	File file_;
+};
+
 class InstrumentIcon : public Component
 {
 public:
@@ -27,11 +48,18 @@ public:
     void paint (Graphics&);
     void resized();
 
+	int width() const
+	{
+		return width_;
+	}
+
 private:
 
 	Label label_;
-	ImageButton button_;
+	InstrumentButton button_;
 	StretchableLayoutManager layout_;
+	int width_;
+	File instrument_file_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentIcon)
 };
 

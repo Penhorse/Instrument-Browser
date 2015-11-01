@@ -15,6 +15,7 @@
 
 #include "OptionsComponent.h"
 #include "InstrumentViewer.h"
+#include "InstrumentLoader.h"
 
 //==============================================================================
 /*
@@ -49,6 +50,7 @@ private:
 	PropertiesFile::Options options_;
 	InstrumentViewer instrument_viewer_;
 	Viewport viewport_;
+	std::unique_ptr<InstrumentLoader> instrument_loader_;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };

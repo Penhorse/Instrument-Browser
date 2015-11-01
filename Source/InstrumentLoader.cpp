@@ -46,12 +46,28 @@ void InstrumentLoader::run()
 
 					Instrument instrument;
 
+					instrument.icon.width = 0;
+					instrument.icon.height = 0;
+
 					instrument.path = foundFile.getFullPathName().toStdString();
 
 					const auto ism = ismsnoop_->open(instrument.path.c_str());
 
 					if (ism)
 					{
+						int name_length = 0;
+
+						ismsnoop_->get_name(ism, nullptr, &name_length);
+
+						if (name_length > 0)
+						{
+							std::vector<char> buffer(name_length + 1);
+
+							ismsnoop_->get_name(ism, buffer.data(), nullptr);
+
+							instrument.name = std::string(buffer.begin(), buffer.end());
+						}
+
 						int width, height, depth;
 
 						ismsnoop_->get_panel_icon_size(ism, &width, &height, &depth);
@@ -64,9 +80,9 @@ void InstrumentLoader::run()
 							instrument.icon.bytes.resize(width * height * (depth / 8));
 
 							ismsnoop_->get_panel_icon_bytes(ism, instrument.icon.bytes.data());
-
-							receiver_->receive_instrument(instrument);
 						}
+
+						receiver_->receive_instrument(instrument);
 
 						ismsnoop_->close(ism);
 					}

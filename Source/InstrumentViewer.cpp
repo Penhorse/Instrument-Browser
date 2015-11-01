@@ -34,8 +34,21 @@ void InstrumentViewer::paint (Graphics& g)
 
        You should replace everything in this method with your own
        drawing code..
-    */
 
+	addAndMakeVisible(icon);
+
+	instrument_layout_.setItemLayout((instruments_.size() - 1) * 2, icon->width(), icon->width(), icon->width());
+	instrument_layout_.setItemLayout(((instruments_.size() - 1) * 2) - 1, 10, 10, 10);
+
+	int total_width = 0;
+
+	for (const auto instrument : instruments_)
+	{
+		total_width += instrument->getWidth() + 10;
+	}
+
+	setSize(total_width, getHeight());
+    */
 }
 
 void InstrumentViewer::resized()
@@ -57,23 +70,16 @@ void InstrumentViewer::receive_instrument(const Instrument & instrument)
 {
 	const auto icon = new InstrumentIcon(instrument);
 	instruments_.push_back(icon);
-
-	addAndMakeVisible(icon);
-
-	instrument_layout_.setItemLayout((instruments_.size() - 1) * 2, instrument.icon.width, instrument.icon.width, instrument.icon.width);
-	instrument_layout_.setItemLayout(((instruments_.size() - 1) * 2) - 1, 10, 10, 10);
-
-	int total_width = 0;
-
-	for (const auto instrument : instruments_)
-	{
-		total_width += instrument->getWidth() + 10;
-	}
-
-	setSize(total_width, getHeight());
+	repaint();
 }
 
 void InstrumentViewer::refresh_instruments()
 {
-	// TODO
+	for (const auto instrument : instruments_)
+	{
+		removeChildComponent(instrument);
+		delete instrument;
+	}
+
+	instruments_.clear();
 }

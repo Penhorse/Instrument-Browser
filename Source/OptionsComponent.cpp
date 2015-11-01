@@ -25,6 +25,8 @@ OptionsComponent::OptionsComponent(const PropertiesFile::Options & options, Mess
 
 	const auto user_settings = props.getUserSettings();
 
+	directories_editor_.setMultiLine(true, false);
+	directories_editor_.setReturnKeyStartsNewLine(true);
 	directories_editor_.setText(user_settings->getValue("directories"));
 
 	buttons_layout_.setItemLayout(0, 0, -1, -1);
