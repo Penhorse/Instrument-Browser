@@ -26,12 +26,17 @@ public:
 	bool load();
 	static std::string library_filename();
 
-private:
-
 	using Sig_ismsnoop_open = ISMSnoopInstrument*(const char*);
 	using Sig_ismsnoop_close = void(ISMSnoopInstrument*);
 	using Sig_ismsnoop_get_panel_icon_size = void(ISMSnoopInstrument*, int*, int*, int*);
 	using Sig_ismsnoop_get_panel_icon_bytes = void(ISMSnoopInstrument*, char*);
+
+	std::function<Sig_ismsnoop_open> open;
+	std::function<Sig_ismsnoop_close> close;
+	std::function<Sig_ismsnoop_get_panel_icon_size> get_panel_icon_size;
+	std::function<Sig_ismsnoop_get_panel_icon_bytes> get_panel_icon_bytes;
+
+private:
 
 	rtw::DynamicLibrary library_;
 

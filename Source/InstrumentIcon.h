@@ -31,6 +31,7 @@ private:
 
 	Label label_;
 	ImageButton button_;
+	StretchableLayoutManager layout_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentIcon)
 };
 

@@ -42,6 +42,15 @@ void InstrumentViewer::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+	std::vector<Component*> components;
+
+	for (const auto instrument : instruments_)
+	{
+		components.push_back(instrument);
+		components.push_back(nullptr);
+	}
+
+	instrument_layout_.layOutComponents(components.data(), components.size(), 10, 10, getWidth() - 20, getHeight() - 20, false, true);
 }
 
 void InstrumentViewer::receive_instrument(const Instrument & instrument)
@@ -51,24 +60,17 @@ void InstrumentViewer::receive_instrument(const Instrument & instrument)
 
 	addAndMakeVisible(icon);
 
-	instrument_layout_.setItemLayout((instruments_.size() - 1) * 2, 100, 100, 100);
+	instrument_layout_.setItemLayout((instruments_.size() - 1) * 2, instrument.icon.width, instrument.icon.width, instrument.icon.width);
 	instrument_layout_.setItemLayout(((instruments_.size() - 1) * 2) - 1, 10, 10, 10);
-
-	std::vector<Component*> components;
 
 	int total_width = 0;
 
 	for (const auto instrument : instruments_)
 	{
-		components.push_back(instrument);
-		components.push_back(nullptr);
-
-		total_width += 110;
+		total_width += instrument->getWidth() + 10;
 	}
 
 	setSize(total_width, getHeight());
-
-	instrument_layout_.layOutComponents(components.data(), components.size(), 10, 10, getWidth() - 20, getHeight() - 20, false, true);
 }
 
 void InstrumentViewer::refresh_instruments()

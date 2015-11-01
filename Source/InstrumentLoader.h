@@ -30,6 +30,7 @@ public:
 private:
 
 	StringArray directories_;
+	std::shared_ptr<ISMSnoopWrapper> ismsnoop_;
 	InstrumentReceiver * receiver_;
 };
 

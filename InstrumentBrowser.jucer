@@ -37,7 +37,7 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <VS2015 targetFolder="Builds/VisualStudio2015">
+    <VS2015 targetFolder="Builds/VisualStudio2015" extraCompilerFlags="/I&quot;$(ProjectDir)..\..\submodules\ismsnoop\library\include&quot;&#10;/I&quot;$(ProjectDir)..\..\submodules\ismsnoop\submodules\rtw\include&quot;">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="InstrumentBrowser"/>
@@ -45,19 +45,19 @@
                        isDebug="0" optimisation="3" targetName="InstrumentBrowser"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_events" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_graphics" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_data_structures" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_cryptography" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_video" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_opengl" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="E:/juce/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="E:/juce/modules"/>
+        <MODULEPATH id="juce_video" path="../../juce"/>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
       </MODULEPATHS>
     </VS2015>
   </EXPORTFORMATS>

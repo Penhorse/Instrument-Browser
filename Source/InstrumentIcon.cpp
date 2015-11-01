@@ -15,13 +15,30 @@
 InstrumentIcon::InstrumentIcon(const Instrument & ism) :
 	label_(String::empty, ism.path)
 {
-	Image image();
+	Image image(Image::PixelFormat::ARGB, ism.icon.width, ism.icon.height, true);
 
-	//button_.setImages(false, true, true, )
+	for (int row = 1; row < ism.icon.height; row++)
+	{
+		for (int col = 0; col < ism.icon.width; col++)
+		{
+			const auto b = ism.icon.bytes[((ism.icon.width * 4) * row) + (4 * col) + 0];
+			const auto g = ism.icon.bytes[((ism.icon.width * 4) * row) + (4 * col) + 1];
+			const auto r = ism.icon.bytes[((ism.icon.width * 4) * row) + (4 * col) + 2];
+			//const auto a = ism.icon.bytes[(ism.icon.width * row) + (4 * col) + 3];
+
+			image.setPixelAt(col, ism.icon.height - row, Colour(r, g, b));
+		}
+	}
+	button_.setImages(true, false, false, image, 1.0f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour());
 	label_.setJustificationType(Justification::centredBottom);
 	addAndMakeVisible(label_);
+	addAndMakeVisible(button_);
 
-	setSize(100, 100);
+	setSize(ism.icon.width, ism.icon.height);
+
+	layout_.setItemLayout(0, ism.icon.height, ism.icon.height, ism.icon.height);
+	layout_.setItemLayout(1, 10, 10, 10);
+	layout_.setItemLayout(2, -1, -1, -1);
 }
 
 InstrumentIcon::~InstrumentIcon()
@@ -30,23 +47,13 @@ InstrumentIcon::~InstrumentIcon()
 
 void InstrumentIcon::paint (Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (Colours::white);   // clear the background
-
     g.setColour (Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 }
 
 void InstrumentIcon::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+	Component * components[] = { &button_, 0, &label_ };
 
-	label_.setBounds(0, 0, getWidth(), getHeight());
+	layout_.layOutComponents(components, 3, 0, 0, getWidth(), getHeight(), true, true);
 }

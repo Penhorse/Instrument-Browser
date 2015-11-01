@@ -81,13 +81,6 @@ void MainContentComponent::reload_instruments()
 		set_error_message("Failed to load " + ismsnoop->library_filename() + ".");
 		return;
 	}
-	const auto ismsnoop_library_filename = rtw::dylib::get_filename("ismsnoop");
-
-	rtw::DynamicLibrary library(ismsnoop_library_filename);
-
-	if (!library.load())
-	{
-	}
 
 	ApplicationProperties props;
 
@@ -113,7 +106,7 @@ void MainContentComponent::reload_instruments()
 		directories.add(directory);
 	}
 	
-	InstrumentLoader loader(directories, library, &instrument_viewer_);
+	InstrumentLoader loader(directories, ismsnoop, &instrument_viewer_);
 
 	loader.run();
 }

@@ -12,10 +12,12 @@
 
 #include "Instrument.h"
 #include "InstrumentReceiver.h"
+#include "ISMSnoopWrapper.h"
 
-InstrumentLoader::InstrumentLoader(const StringArray & directories, InstrumentReceiver * receiver) :
+InstrumentLoader::InstrumentLoader(const StringArray & directories, std::shared_ptr<ISMSnoopWrapper> ismsnoop, InstrumentReceiver * receiver) :
 	Thread("InstrumentLoader"),
 	directories_(directories),
+	ismsnoop_(ismsnoop),
 	receiver_(receiver)
 {
 	// nothing
@@ -42,7 +44,32 @@ void InstrumentLoader::run()
 
 					File foundFile(directory_iterator.getFile());
 
-					receiver_->receive_instrument({ foundFile.getFullPathName() });
+					Instrument instrument;
+
+					instrument.path = foundFile.getFullPathName().toStdString();
+
+					const auto ism = ismsnoop_->open(instrument.path.c_str());
+
+					if (ism)
+					{
+						int width, height, depth;
+
+						ismsnoop_->get_panel_icon_size(ism, &width, &height, &depth);
+
+						if (width > 1 && height > 1 && depth > 1)
+						{
+							instrument.icon.width = width;
+							instrument.icon.height = height;
+
+							instrument.icon.bytes.resize(width * height * (depth / 8));
+
+							ismsnoop_->get_panel_icon_bytes(ism, instrument.icon.bytes.data());
+
+							receiver_->receive_instrument(instrument);
+						}
+
+						ismsnoop_->close(ism);
+					}
 				}
 			}
 		}

@@ -11,11 +11,20 @@
 #ifndef INSTRUMENT_H_INCLUDED
 #define INSTRUMENT_H_INCLUDED
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <string>
+#include <vector>
 
 struct Instrument
 {
-	String path;
+	struct Icon
+	{
+		int width;
+		int height;
+		std::vector<char> bytes;
+	};
+
+	std::string path;
+	Icon icon;
 };
 
 #endif  // INSTRUMENT_H_INCLUDED
