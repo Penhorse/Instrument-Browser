@@ -16,8 +16,6 @@
 #include "Instrument.h"
 
 //==============================================================================
-/*
-*/
 class InstrumentButton : public ImageButton
 {
 
