@@ -4,6 +4,7 @@
               bundleIdentifier="com.pleasesendhelp.InstrumentBrowser" includeBinaryInAppConfig="1"
               jucerVersion="3.2.0">
   <MAINGROUP id="sHgRtS" name="Instrument Browser">
+    <FILE id="M3RYiV" name="refresh.png" compile="0" resource="1" file="Resources/Icons/refresh.png"/>
     <FILE id="On1c5m" name="instrument.png" compile="0" resource="1" file="Resources/Icons/instrument.png"/>
     <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
     <GROUP id="{1BA1119E-6D18-D329-CC72-E5B92F0F502B}" name="Source">

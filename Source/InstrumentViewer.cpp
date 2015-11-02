@@ -45,6 +45,8 @@ void InstrumentViewer::resized()
 
 void InstrumentViewer::receive_instrument(const Instrument & instrument)
 {
+	std::lock_guard<std::mutex> lock(mutex_);
+
 	const auto icon = new InstrumentIcon(instrument);
 	instruments_.push_back(icon);
 
@@ -56,6 +58,8 @@ void InstrumentViewer::receive_instrument(const Instrument & instrument)
 
 void InstrumentViewer::refresh_instruments()
 {
+	std::lock_guard<std::mutex> lock(mutex_);
+
 	for (const auto instrument : instruments_)
 	{
 		removeChildComponent(instrument);
@@ -67,6 +71,8 @@ void InstrumentViewer::refresh_instruments()
 
 void InstrumentViewer::handleAsyncUpdate()
 {
+	std::lock_guard<std::mutex> lock(mutex_);
+
 	int total_width = 0;
 
 	for (const auto instrument : instruments_)
