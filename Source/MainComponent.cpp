@@ -88,6 +88,11 @@ void MainContentComponent::reload_instruments()
 {
 	clear_error_message();
 
+	if(instrument_loader_)
+	{
+		instrument_loader_->stopThread(500);
+	}
+
 	instrument_viewer_.refresh_instruments();
 
 	const auto ismsnoop = std::make_shared<ISMSnoopWrapper>();
@@ -122,11 +127,6 @@ void MainContentComponent::reload_instruments()
 		directories.add(directory);
 	}
 	
-	if(instrument_loader_)
-	{
-		instrument_loader_->stopThread(500);
-	}
-
 	instrument_loader_ = std::unique_ptr<InstrumentLoader>(new InstrumentLoader(directories, ismsnoop, &instrument_viewer_));
 
 	instrument_loader_->startThread();
