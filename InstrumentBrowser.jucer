@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="RuXVlW" name="InstrumentBrowser" projectType="guiapp" version="1.0.0"
-              bundleIdentifier="com.yourcompany.InstrumentBrowser" includeBinaryInAppConfig="1"
+<JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.pleasesendhelp.InstrumentBrowser" includeBinaryInAppConfig="1"
               jucerVersion="3.2.0">
-  <MAINGROUP id="sHgRtS" name="InstrumentBrowser">
+  <MAINGROUP id="sHgRtS" name="Instrument Browser">
     <FILE id="On1c5m" name="instrument.png" compile="0" resource="1" file="Resources/Icons/instrument.png"/>
     <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
     <GROUP id="{1BA1119E-6D18-D329-CC72-E5B92F0F502B}" name="Source">
