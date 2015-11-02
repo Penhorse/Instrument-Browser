@@ -25,7 +25,7 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 
 MainContentComponent::~MainContentComponent()
 {
-
+	instrument_loader_->stopThread(500);
 }
 
 void MainContentComponent::paint (Graphics& g)
@@ -105,9 +105,9 @@ void MainContentComponent::reload_instruments()
 		directories.add(directory);
 	}
 	
-	instrument_loader_ = std::make_unique<InstrumentLoader>(directories, ismsnoop, &instrument_viewer_);
+	instrument_loader_ = std::unique_ptr<InstrumentLoader>(new InstrumentLoader(directories, ismsnoop, &instrument_viewer_));
 
-	instrument_loader_->run();
+	instrument_loader_->startThread();
 }
 
 void MainContentComponent::handle_options_changed()

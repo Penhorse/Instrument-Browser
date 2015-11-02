@@ -18,7 +18,7 @@
 //==============================================================================
 /*
 */
-class OptionsComponent : public Component, public MouseListener
+class OptionsComponent : public Component
 {
 public:
 	OptionsComponent(const PropertiesFile::Options & options, MessageListener * listener);

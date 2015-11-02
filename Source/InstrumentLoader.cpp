@@ -14,6 +14,9 @@
 #include "InstrumentReceiver.h"
 #include "ISMSnoopWrapper.h"
 
+#include <chrono>
+#include <thread>
+
 InstrumentLoader::InstrumentLoader(const StringArray & directories, std::shared_ptr<ISMSnoopWrapper> ismsnoop, InstrumentReceiver * receiver) :
 	Thread("InstrumentLoader"),
 	directories_(directories),

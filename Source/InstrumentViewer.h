@@ -19,7 +19,7 @@
 //==============================================================================
 /*
 */
-class InstrumentViewer    : public Component, public InstrumentReceiver
+class InstrumentViewer : public Component, public InstrumentReceiver, public AsyncUpdater
 {
 public:
     InstrumentViewer();
@@ -30,6 +30,8 @@ public:
 
 	void receive_instrument(const Instrument & instrument) override;
 	void refresh_instruments() override;
+
+	void handleAsyncUpdate();
 
 private:
 
