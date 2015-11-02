@@ -29,7 +29,6 @@ InstrumentIcon::InstrumentIcon(const Instrument & ism) :
 				const auto b = ism.icon.bytes[((ism.icon.width * 4) * row) + (4 * col) + 0];
 				const auto g = ism.icon.bytes[((ism.icon.width * 4) * row) + (4 * col) + 1];
 				const auto r = ism.icon.bytes[((ism.icon.width * 4) * row) + (4 * col) + 2];
-				//const auto a = ism.icon.bytes[(ism.icon.width * row) + (4 * col) + 3];
 
 				image.setPixelAt(col, ism.icon.height - row, Colour(r, g, b));
 			}
@@ -58,12 +57,11 @@ InstrumentIcon::InstrumentIcon(const Instrument & ism) :
 
 InstrumentIcon::~InstrumentIcon()
 {
+	// nothing
 }
 
 void InstrumentIcon::paint (Graphics& g)
 {
-   // g.setColour (Colours::grey);
-   // g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 	g.setFillType(Colour());
 	g.drawRect(button_.getBounds(), 10.0f);
 }
