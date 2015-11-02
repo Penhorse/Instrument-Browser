@@ -46,6 +46,7 @@ private:
 
 	OptionsComponent options_component_;
 	String error_message_;
+	ImageButton refresh_button_;
 	ImageButton options_button_;
 	PropertiesFile::Options options_;
 	InstrumentViewer instrument_viewer_;

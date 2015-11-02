@@ -14,7 +14,11 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	options_button_.setSize(32, 32);
 	options_button_.addMouseListener(this, false);
+	refresh_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	refresh_button_.setSize(32, 32);
+	refresh_button_.addMouseListener(this, false);
 	addAndMakeVisible(options_button_);
+	addAndMakeVisible(refresh_button_);
 	addAndMakeVisible(instrument_viewer_);
 	addAndMakeVisible(viewport_);
 	viewport_.setViewedComponent(&instrument_viewer_, false);
@@ -25,7 +29,10 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 
 MainContentComponent::~MainContentComponent()
 {
-	instrument_loader_->stopThread(500);
+	if(instrument_loader_)
+	{
+		instrument_loader_->stopThread(500);
+	}
 }
 
 void MainContentComponent::paint (Graphics& g)
@@ -43,15 +50,23 @@ void MainContentComponent::paint (Graphics& g)
 void MainContentComponent::resized()
 {
 	options_button_.setTopLeftPosition(getWidth() - options_button_.getWidth() - 10, getHeight() - options_button_.getHeight() - 10);
+	refresh_button_.setTopLeftPosition(options_button_.getX() - 10 - refresh_button_.getWidth(), getHeight() - refresh_button_.getHeight() - 10);
 	viewport_.setBounds(10, 10, getWidth() - 20, options_button_.getY() - 20);
 	instrument_viewer_.setSize(instrument_viewer_.getWidth(), viewport_.getHeight() - 20);
 }
 
 void MainContentComponent::mouseDown(const MouseEvent &event)
 {
+	if (event.originalComponent == &refresh_button_)
+	{
+		reload_instruments();
+		return;
+	}
+
 	if (event.originalComponent == &options_button_)
 	{
 		DialogWindow::showModalDialog("Options", &options_component_, 0, Colour(255, 255, 255), true, true);
+		return;
 	}
 }
 
@@ -72,6 +87,8 @@ void MainContentComponent::set_error_message(const String & error_message)
 void MainContentComponent::reload_instruments()
 {
 	clear_error_message();
+
+	instrument_viewer_.refresh_instruments();
 
 	const auto ismsnoop = std::make_shared<ISMSnoopWrapper>();
 
@@ -105,6 +122,11 @@ void MainContentComponent::reload_instruments()
 		directories.add(directory);
 	}
 	
+	if(instrument_loader_)
+	{
+		instrument_loader_->stopThread(500);
+	}
+
 	instrument_loader_ = std::unique_ptr<InstrumentLoader>(new InstrumentLoader(directories, ismsnoop, &instrument_viewer_));
 
 	instrument_loader_->startThread();
@@ -112,7 +134,6 @@ void MainContentComponent::reload_instruments()
 
 void MainContentComponent::handle_options_changed()
 {
-	instrument_viewer_.refresh_instruments();
 	reload_instruments();
 }
 
