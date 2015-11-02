@@ -1,3 +1,4 @@
+
 [submodule "submodules/ismsnoop"]
 	path = submodules/ismsnoop
-	url = psh:repos/ismsnoop
+	url = https://github.com/Penhorse/ismsnoop.git
