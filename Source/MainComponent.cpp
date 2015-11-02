@@ -66,7 +66,7 @@ void MainContentComponent::mouseDown(const MouseEvent &event)
 
 	if (event.originalComponent == &options_button_)
 	{
-		DialogWindow::showModalDialog("Options", &options_component_, 0, Colour(255, 255, 255), true, true);
+		DialogWindow::showDialog("Options", &options_component_, 0, Colour(255, 255, 255), true, true);
 		return;
 	}
 }
