@@ -42,9 +42,9 @@
             smallIcon="On1c5m" bigIcon="On1c5m">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="InstrumentBrowser"/>
+                       isDebug="1" optimisation="1" targetName="InstrumentBrowser" useRuntimeLibDLL="0"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="InstrumentBrowser"/>
+                       isDebug="0" optimisation="3" targetName="InstrumentBrowser" useRuntimeLibDLL="0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_video" path="JuceLibraryCode/modules"/>
