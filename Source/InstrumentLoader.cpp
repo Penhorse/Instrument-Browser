@@ -57,22 +57,25 @@ void InstrumentLoader::run()
 
 	for (const auto & dir : directories_)
 	{
-		if (!File::isAbsolutePath(dir))
+		if (dir.isNotEmpty())
 		{
-			std::stringstream ss;
-
-			ss << "'" << dir << "' is not an absolute path.";
-
-			error_receiver_->receive_error(ss.str());
-		}
-		else
-		{
-			File dir_file(dir);
-			num_instruments_found += load_directory(dir_file);
-
-			if(threadShouldExit())
+			if (!File::isAbsolutePath(dir))
 			{
-				return;
+				std::stringstream ss;
+
+				ss << "'" << dir << "' is not an absolute path.";
+
+				error_receiver_->receive_error(ss.str());
+			}
+			else
+			{
+				File dir_file(dir);
+				num_instruments_found += load_directory(dir_file);
+
+				if (threadShouldExit())
+				{
+					return;
+				}
 			}
 		}
 	}
