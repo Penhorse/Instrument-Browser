@@ -9,13 +9,13 @@
 MainContentComponent::MainContentComponent(const PropertiesFile::Options & options) :
 	options_component_(options, this),
 	options_(options),
-	error_icon_(ImageFileFormat::loadFrom(BinaryData::options_cog_png, BinaryData::options_cog_pngSize)),
+	error_icon_(ImageFileFormat::loadFrom(BinaryData::error_png, BinaryData::error_pngSize)),
 	error_viewer_(this),
 	errors_to_display_(false)
 {
 	const auto cog_image = ImageFileFormat::loadFrom(BinaryData::options_cog_png, BinaryData::options_cog_pngSize);
 	const auto refresh_image = ImageFileFormat::loadFrom(BinaryData::refresh_png, BinaryData::refresh_pngSize);
-	errors_button_.setSize(32, 32);
+	errors_button_.setSize(24, 24);
 	errors_button_.addMouseListener(this, false);
 	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	options_button_.setSize(32, 32);
@@ -48,7 +48,7 @@ void MainContentComponent::paint (Graphics& g)
 
 void MainContentComponent::resized()
 {
-	errors_button_.setTopLeftPosition(10, getHeight() - errors_button_.getHeight() - 10);
+	errors_button_.setTopLeftPosition(14, getHeight() - errors_button_.getHeight() - 14);
 	options_button_.setTopLeftPosition(getWidth() - options_button_.getWidth() - 10, getHeight() - options_button_.getHeight() - 10);
 	refresh_button_.setTopLeftPosition(options_button_.getX() - 10 - refresh_button_.getWidth(), getHeight() - refresh_button_.getHeight() - 10);
 	viewport_.setBounds(10, 10, getWidth() - 20, options_button_.getY() - 20);
@@ -230,5 +230,5 @@ void MainContentComponent::no_errors()
 {
 	errors_to_display_ = false;
 
-	errors_button_.setImages(false, true, true, error_icon_, 0.1, Colour(), Image(), 0.1f, Colour(), Image(), 0.1f, Colour(), 0);
+	errors_button_.setImages(false, true, true, error_icon_, 0.05, Colour(), Image(), 0.1f, Colour(), Image(), 0.1f, Colour(), 0);
 }
