@@ -33,6 +33,8 @@ public:
 
 	void handleAsyncUpdate();
 
+	int num_instruments() const;
+
 private:
 
 	std::vector<InstrumentIcon*> instruments_;

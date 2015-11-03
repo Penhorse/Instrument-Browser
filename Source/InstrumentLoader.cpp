@@ -10,6 +10,7 @@
 
 #include "InstrumentLoader.h"
 
+#include "ErrorReceiver.h"
 #include "InstrumentReceiver.h"
 
 #include <chrono>
@@ -30,6 +31,26 @@ InstrumentLoader::InstrumentLoader(
 	// nothing
 }
 
+static const String EXCLUDED_DIRECTORIES[] =
+{
+	"__MACOSX"
+};
+
+static bool excluded(const File & dir)
+{
+	for(const auto & XD : EXCLUDED_DIRECTORIES)
+	{
+		const auto path = dir.getFullPathName();
+
+		if(path.contains(String("/") + XD) || path.contains(String("\\") + XD))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void InstrumentLoader::run()
 {
 	int num_instruments_found = 0;
@@ -40,15 +61,14 @@ void InstrumentLoader::run()
 		{
 			std::stringstream ss;
 
-			ss << "'" << dir << "' is not an absolute path";
+			ss << "'" << dir << "' is not an absolute path.";
 
 			error_receiver_->receive_error(ss.str());
 		}
 		else
 		{
 			File dir_file(dir);
-
-			num_instruments_found += load_directory(File(dir));
+			num_instruments_found += load_directory(dir_file);
 
 			if(threadShouldExit())
 			{
@@ -59,7 +79,7 @@ void InstrumentLoader::run()
 
 	if(num_instruments_found == 0)
 	{
-		error_receiver_->receive_error("No instruments found in the specified directories");
+		error_receiver_->receive_error("No instruments found in the specified directories.");
 	}
 }
 
@@ -85,9 +105,13 @@ int InstrumentLoader::load_directory(const File & dir) const
 			return result;
 		}
 
-		load_file(File(directory_iterator.getFile()));
+		const auto file = directory_iterator.getFile();
 
-		result++;
+		if (!excluded(file))
+		{
+			load_file(file);
+			result++;
+		}
 	}
 
 	return result;
@@ -108,7 +132,7 @@ void InstrumentLoader::load_file(const File & file) const
 	{
 		std::stringstream ss;
 
-		ss << "Failed to open '" << instrument.path << "' for some reason";
+		ss << "Failed to open '" << instrument.path << "' for some reason.";
 
 		error_receiver_->receive_error(ss.str());
 	}
@@ -125,7 +149,7 @@ void InstrumentLoader::load_file(const File & file) const
 		{
 			std::stringstream ss;
 
-			ss << "Failed to read '" << instrument.path << "'";
+			ss << "Failed to read '" << instrument.path << "'.";
 
 			error_receiver_->receive_error(ss.str());
 		}
@@ -138,7 +162,7 @@ void InstrumentLoader::load_file(const File & file) const
 	ismsnoop_->close(ism);
 }
 
-std::string InstrumentLoader::get_name(ISMSnoopInstrument * ism) const;
+std::string InstrumentLoader::get_name(ISMSnoopInstrument * ism) const
 {
 	int name_length = 0;
 

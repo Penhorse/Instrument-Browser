@@ -8,6 +8,9 @@
     <FILE id="On1c5m" name="instrument.png" compile="0" resource="1" file="Resources/Icons/instrument.png"/>
     <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
     <GROUP id="{1BA1119E-6D18-D329-CC72-E5B92F0F502B}" name="Source">
+      <FILE id="SmPWqg" name="ErrorViewer.h" compile="0" resource="0" file="Source/ErrorViewer.h"/>
+      <FILE id="XnVqER" name="ErrorViewer.cpp" compile="1" resource="0" file="Source/ErrorViewer.cpp"/>
+      <FILE id="R2XVPO" name="ErrorReceiver.h" compile="0" resource="0" file="Source/ErrorReceiver.h"/>
       <FILE id="wleOnX" name="ISMSnoopWrapper.cpp" compile="1" resource="0"
             file="Source/ISMSnoopWrapper.cpp"/>
       <FILE id="h3huct" name="ISMSnoopWrapper.h" compile="0" resource="0"

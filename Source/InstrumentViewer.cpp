@@ -83,3 +83,8 @@ void InstrumentViewer::handleAsyncUpdate()
 
 	setSize(total_width, getHeight());
 }
+
+int InstrumentViewer::num_instruments() const
+{
+	return instruments_.size();
+}

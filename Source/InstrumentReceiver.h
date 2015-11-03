@@ -22,7 +22,6 @@ public:
 
 	virtual void refresh_instruments() = 0;
 	virtual void receive_instrument(const Instrument & instrument) = 0;
-	virtual void receive_error(const std::string & what) = 0;
 };
 
 #endif  // INSTRUMENTRECEIVER_H_INCLUDED
