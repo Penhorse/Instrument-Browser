@@ -25,7 +25,7 @@ InstrumentViewer::~InstrumentViewer()
 	}
 }
 
-void InstrumentViewer::paint (Graphics& g)
+void InstrumentViewer::paint(Graphics& g)
 {
 	// nothing
 }
@@ -76,5 +76,4 @@ void InstrumentViewer::handleAsyncUpdate()
 	}
 
 	setSize(total_width, getHeight());
-
 }

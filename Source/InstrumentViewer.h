@@ -17,8 +17,6 @@
 #include "InstrumentIcon.h"
 
 //==============================================================================
-/*
-*/
 class InstrumentViewer : public Component, public InstrumentReceiver, public AsyncUpdater
 {
 public:

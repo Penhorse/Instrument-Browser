@@ -15,23 +15,37 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "Instrument.h"
+#include "ISMSnoopWrapper.h"
+
+class ErrorReceiver;
 class InstrumentReceiver;
-class ISMSnoopWrapper;
 
 class InstrumentLoader : public Thread
 {
 
 public:
 
-	InstrumentLoader(const StringArray & directories, std::shared_ptr<ISMSnoopWrapper> ismsnoop, InstrumentReceiver * receiver);
+	InstrumentLoader(
+			const StringArray & directories,
+			std::shared_ptr<ISMSnoopWrapper> ismsnoop,
+			InstrumentReceiver * instrument_receiver,
+			ErrorReceiver * error_receiver);
 
 	void run();
 
 private:
 
+	int try_load_directory(const File & dir) const;
+	int load_directory(const File & dir) const;
+	void load_file(const File & file) const;
+	std::string get_name(ISMSnoopInstrument * ism) const;
+	Instrument::Icon get_icon(ISMSnoopInstrument * ism) const;
+
 	StringArray directories_;
 	std::shared_ptr<ISMSnoopWrapper> ismsnoop_;
-	InstrumentReceiver * receiver_;
+	InstrumentReceiver * instrument_receiver_;
+	ErrorReceiver * error_receiver_;
 };
 
 

@@ -14,14 +14,18 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	options_button_.setSize(32, 32);
 	options_button_.addMouseListener(this, false);
+	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	options_button_.setSize(32, 32);
+	options_button_.addMouseListener(this, false);
 	refresh_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	refresh_button_.setSize(32, 32);
 	refresh_button_.addMouseListener(this, false);
 	addAndMakeVisible(options_button_);
 	addAndMakeVisible(refresh_button_);
 	addAndMakeVisible(instrument_viewer_);
+	addAndMakeVisible(error_viewer_);
 	addAndMakeVisible(viewport_);
-	viewport_.setViewedComponent(&instrument_viewer_, false);
+	viewport_.setViewedComponent(instrument_viewer_, false);
     setSize(600, 400);
 
 	reload_instruments();

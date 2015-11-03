@@ -5,8 +5,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "OptionsComponent.h"
+#include "ErrorViewer.h"
 #include "InstrumentViewer.h"
+#include "OptionsComponent.h"
 #include "InstrumentLoader.h"
 
 //==============================================================================
@@ -34,12 +35,14 @@ private:
 
 	OptionsComponent options_component_;
 	String error_message_;
+	ImageButton errors_button_;
 	ImageButton refresh_button_;
 	ImageButton options_button_;
 	PropertiesFile::Options options_;
-	InstrumentViewer instrument_viewer_;
 	Viewport viewport_;
 	std::unique_ptr<InstrumentLoader> instrument_loader_;
+	InstrumentViewer instrument_viewer_;
+	ErrorViewer error_viewer_;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
