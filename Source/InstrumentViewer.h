@@ -13,6 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include <mutex>
+
 #include "InstrumentReceiver.h"
 #include "InstrumentIcon.h"
 
@@ -35,6 +37,7 @@ private:
 
 	std::vector<InstrumentIcon*> instruments_;
 	StretchableLayoutManager instrument_layout_;
+	std::mutex mutex_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentViewer)
 };
 

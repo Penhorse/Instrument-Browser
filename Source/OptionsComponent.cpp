@@ -38,7 +38,7 @@ OptionsComponent::OptionsComponent(const PropertiesFile::Options & options, Mess
 	addAndMakeVisible(apply_button_);
 	addAndMakeVisible(directories_editor_);
 
-	setSize(800, 500);
+	setSize(800, 200);
 }
 
 OptionsComponent::~OptionsComponent()

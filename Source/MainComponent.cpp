@@ -11,13 +11,14 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	options_(options)
 {
 	const auto cog_image = ImageFileFormat::loadFrom(BinaryData::options_cog_png, BinaryData::options_cog_pngSize);
+	const auto refresh_image = ImageFileFormat::loadFrom(BinaryData::refresh_png, BinaryData::refresh_pngSize);
+	error_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	error_button_.setSize(32, 32);
+	error_button_.addMouseListener(this, false);
 	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	options_button_.setSize(32, 32);
 	options_button_.addMouseListener(this, false);
-	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
-	options_button_.setSize(32, 32);
-	options_button_.addMouseListener(this, false);
-	refresh_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	refresh_button_.setImages(true, true, true, refresh_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	refresh_button_.setSize(32, 32);
 	refresh_button_.addMouseListener(this, false);
 	addAndMakeVisible(options_button_);
@@ -25,8 +26,8 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	addAndMakeVisible(instrument_viewer_);
 	addAndMakeVisible(error_viewer_);
 	addAndMakeVisible(viewport_);
-	viewport_.setViewedComponent(instrument_viewer_, false);
-    setSize(600, 400);
+	viewport_.setViewedComponent(&instrument_viewer_, false);
+    setSize(600, 300);
 
 	reload_instruments();
 }
@@ -69,7 +70,7 @@ void MainContentComponent::mouseDown(const MouseEvent &event)
 
 	if (event.originalComponent == &options_button_)
 	{
-		DialogWindow::showModalDialog("Options", &options_component_, 0, Colour(255, 255, 255), true, true);
+		DialogWindow::showDialog("Options", &options_component_, 0, Colour(255, 255, 255), true, true);
 		return;
 	}
 }
