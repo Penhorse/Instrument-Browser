@@ -100,11 +100,13 @@ void InstrumentViewer::apply_filter()
 
 	if(filter_.isEmpty())
 	{
-		for(const auto icon : icons_)
+		for (const auto & instrument : instruments_)
 		{
-			push_visible_icon(icon.second);
+			const auto icon = icons_[&instrument];
 
-			total_width += icon.second->getWidth() + 10;
+			push_visible_icon(icon);
+
+			total_width += icon->getWidth() + 10;
 		}
 	}
 	else

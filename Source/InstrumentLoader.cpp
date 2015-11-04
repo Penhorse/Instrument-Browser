@@ -38,6 +38,11 @@ static const String EXCLUDED_DIRECTORIES[] =
 
 static bool excluded(const File & dir)
 {
+	if (dir.getFileName()[0] == '.')
+	{
+		return true;
+	}
+
 	for(const auto & XD : EXCLUDED_DIRECTORIES)
 	{
 		const auto path = dir.getFullPathName();
