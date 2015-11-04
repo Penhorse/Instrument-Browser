@@ -3,16 +3,14 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include <memory>
+
 class FilterEditor : public TextEditor
 {
 
 public:
 
 	FilterEditor();
-    ~FilterEditor();
-
-    void paint (Graphics&);
-    void resized();
 
 private:
 

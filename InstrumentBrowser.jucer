@@ -9,6 +9,7 @@
     <FILE id="On1c5m" name="instrument.png" compile="0" resource="1" file="Resources/Icons/instrument.png"/>
     <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
     <GROUP id="{1BA1119E-6D18-D329-CC72-E5B92F0F502B}" name="Source">
+      <FILE id="T6a13L" name="Instrument.cpp" compile="1" resource="0" file="Source/Instrument.cpp"/>
       <FILE id="YcerQH" name="FilterEditor.cpp" compile="1" resource="0"
             file="Source/FilterEditor.cpp"/>
       <FILE id="mOhks2" name="FilterEditor.h" compile="0" resource="0" file="Source/FilterEditor.h"/>

@@ -19,9 +19,9 @@ InstrumentViewer::InstrumentViewer()
 
 InstrumentViewer::~InstrumentViewer()
 {
-	for (const auto instrument : instruments_)
+	for (const auto icon : icons_)
 	{
-		delete instrument;
+		delete icon.second;
 	}
 }
 
@@ -32,26 +32,19 @@ void InstrumentViewer::paint(Graphics& g)
 
 void InstrumentViewer::resized()
 {
-	std::vector<Component*> components;
-
-	for (const auto instrument : instruments_)
-	{
-		components.push_back(instrument);
-		components.push_back(nullptr);
-	}
-
-	instrument_layout_.layOutComponents(components.data(), components.size(), 10, 10, getWidth() - 20, getHeight() - 20, false, true);
+	icon_layout.layOutComponents(visible_icons_.data(), visible_icons_.size(), 10, 10, getWidth() - 20, getHeight() - 20, false, true);
 }
 
 void InstrumentViewer::receive_instrument(const Instrument & instrument)
 {
 	std::lock_guard<std::mutex> lock(mutex_);
 
-	const auto icon = new InstrumentIcon(instrument);
-	instruments_.push_back(icon);
+	instruments_.push_back(instrument);
 
-	instrument_layout_.setItemLayout((instruments_.size() - 1) * 2, icon->width(), icon->width(), icon->width());
-	instrument_layout_.setItemLayout(((instruments_.size() - 1) * 2) - 1, 10, 10, 10);
+	const auto icon = new InstrumentIcon(instrument);
+
+	icons_.insert({ &(instruments_.back()), icon });
+	icons_to_add_.push_back(icon);
 
 	triggerAsyncUpdate();
 }
@@ -60,31 +53,91 @@ void InstrumentViewer::refresh_instruments()
 {
 	std::lock_guard<std::mutex> lock(mutex_);
 
-	for (const auto instrument : instruments_)
+	for (const auto icon : icons_)
 	{
-		removeChildComponent(instrument);
-		delete instrument;
+		removeChildComponent(icon.second);
+		delete icon.second;
 	}
 
+	icons_to_add_.clear();
+	icons_.clear();
 	instruments_.clear();
+
+	triggerAsyncUpdate();
 }
 
 void InstrumentViewer::handleAsyncUpdate()
 {
 	std::lock_guard<std::mutex> lock(mutex_);
 
-	int total_width = 0;
-
-	for (const auto instrument : instruments_)
+	for (const auto icon : icons_to_add_)
 	{
-		total_width += instrument->getWidth() + 10;
-		addAndMakeVisible(instrument);
+		addChildComponent(icon);
 	}
 
-	setSize(total_width, getHeight());
+	icons_to_add_.clear();
+
+	apply_filter();
 }
 
 int InstrumentViewer::num_instruments() const
 {
 	return instruments_.size();
+}
+
+void InstrumentViewer::set_filter(const String & filter)
+{
+	filter_ = filter;
+
+	triggerAsyncUpdate();
+}
+
+void InstrumentViewer::apply_filter()
+{
+	visible_icons_.clear();
+
+	int total_width = 0;
+
+	if(filter_.isEmpty())
+	{
+		for(const auto icon : icons_)
+		{
+			push_visible_icon(icon.second);
+
+			total_width += icon.second->getWidth() + 10;
+		}
+	}
+	else
+	{
+		for(const auto & instrument : instruments_)
+		{
+			const auto icon = icons_[&instrument];
+
+			if(instrument.matches_filter(filter_.toStdString()))
+			{
+				push_visible_icon(icon);
+
+				total_width += icon->getWidth() + 10;
+			}
+			else
+			{
+				icon->setVisible(false);
+			}
+		}
+	}
+
+	setSize(total_width, getHeight());
+}
+
+void InstrumentViewer::push_visible_icon(InstrumentIcon * icon)
+{
+	const auto index = (visible_icons_.size() / 2) + 1;
+
+	icon->setVisible(true);
+
+	visible_icons_.push_back(icon);
+	visible_icons_.push_back(nullptr);
+
+	icon_layout.setItemLayout((index - 1) * 2, icon->width(), icon->width(), icon->width());
+	icon_layout.setItemLayout(((index - 1) * 2) - 1, 10, 10, 10);
 }

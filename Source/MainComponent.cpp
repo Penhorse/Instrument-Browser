@@ -28,10 +28,13 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	addAndMakeVisible(options_button_);
 	addAndMakeVisible(refresh_button_);
 	addAndMakeVisible(viewport_);
-	addAndMakeVisible(filter_editor_);
-	show_instruments();
+	addChildComponent(filter_editor_);
+
+	filter_editor_.grabKeyboardFocus();
+
     setSize(600, 300);
 
+	show_instruments();
 	reload_instruments();
 }
 
@@ -113,7 +116,7 @@ void MainContentComponent::handle_options_button_clicked()
 
 void MainContentComponent::show_errors()
 {
-	errors_button_.setImages(false, true, true, error_icon_, 0.8f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	set_error_button_opacities(0.8, 1.0, 1.0);
 	instrument_viewer_.setVisible(false);
 	error_viewer_.setVisible(true);
 	viewport_.setViewedComponent(&error_viewer_, false);
@@ -122,7 +125,7 @@ void MainContentComponent::show_errors()
 
 void MainContentComponent::show_instruments()
 {
-	errors_button_.setImages(false, true, true, error_icon_, 0.5, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	set_error_button_opacities(0.5, 1.0, 1.0);
 	instrument_viewer_.setVisible(true);
 	error_viewer_.setVisible(false);
 	viewport_.setViewedComponent(&instrument_viewer_, false);
@@ -131,12 +134,12 @@ void MainContentComponent::show_instruments()
 
 void MainContentComponent::reload_instruments()
 {
-	error_viewer_.clear_errors();
-
 	if(instrument_loader_)
 	{
-		instrument_loader_->stopThread(500);
+		instrument_loader_->stopThread(-1);
 	}
+
+	error_viewer_.clear_errors();
 
 	instrument_viewer_.refresh_instruments();
 
@@ -226,16 +229,47 @@ void MainContentComponent::have_errors()
 			? 0.8
 			: 0.5;
 
-	errors_button_.setImages(false, true, true, error_icon_, button_normal_opacity, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	set_error_button_opacities(button_normal_opacity, 1.0, 1.0);
 }
 
 void MainContentComponent::no_errors()
 {
 	errors_to_display_ = false;
 
-	errors_button_.setImages(false, true, true, error_icon_, 0.05, Colour(), Image(), 0.1f, Colour(), Image(), 0.1f, Colour(), 0);
+	set_error_button_opacities(0.05, 0.05, 0.05);
+}
+
+void MainContentComponent::set_error_button_opacities(float normal, float over, float down)
+{
+	errors_button_.setImages(false, true, true, error_icon_, normal, Colour(), Image(), over, Colour(), Image(), down, Colour(), 0);
 }
 
 void MainContentComponent::textEditorTextChanged(TextEditor & te)
 {
+	if(&te == &filter_editor_)
+	{
+		const auto text = te.getText();
+
+		te.setVisible(text.isNotEmpty());
+
+		instrument_viewer_.set_filter(text);
+	}
+}
+
+void MainContentComponent::textEditorEscapeKeyPressed(TextEditor & te)
+{
+	if(&te == &filter_editor_)
+	{
+		te.clear();
+		te.setVisible(false);
+		instrument_viewer_.set_filter(String::empty);
+	}
+}
+
+bool MainContentComponent::keyPressed(const KeyPress & key)
+{
+	filter_editor_.grabKeyboardFocus();
+	filter_editor_.keyPressed(key);
+
+	return true;
 }

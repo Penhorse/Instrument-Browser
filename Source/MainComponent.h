@@ -35,6 +35,8 @@ public:
 	void no_errors() override;
 
 	void textEditorTextChanged(TextEditor & te) override;
+	void textEditorEscapeKeyPressed(TextEditor & te) override;
+	bool keyPressed(const KeyPress & key) override;
 
 private:
 
@@ -44,6 +46,7 @@ private:
 	void handle_errors_button_clicked();
 	void handle_refresh_button_clicked();
 	void handle_options_button_clicked();
+	void set_error_button_opacities(float normal, float over, float down);
 
 	OptionsComponent options_component_;
 	ImageButton errors_button_;
