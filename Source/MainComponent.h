@@ -9,9 +9,14 @@
 #include "InstrumentViewer.h"
 #include "OptionsComponent.h"
 #include "InstrumentLoader.h"
+#include "FilterEditor.h"
 
 //==============================================================================
-class MainContentComponent   : public Component, public MessageListener, public ErrorViewer::Listener
+class MainContentComponent :
+	public Component,
+	public MessageListener,
+	public ErrorViewer::Listener,
+	public FilterEditor::Listener
 {
 public:
     //==============================================================================
@@ -28,6 +33,8 @@ public:
 
 	void have_errors() override;
 	void no_errors() override;
+
+	void textEditorTextChanged(TextEditor & te) override;
 
 private:
 
@@ -49,6 +56,7 @@ private:
 	InstrumentViewer instrument_viewer_;
 	ErrorViewer error_viewer_;
 	bool errors_to_display_;
+	FilterEditor filter_editor_;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };

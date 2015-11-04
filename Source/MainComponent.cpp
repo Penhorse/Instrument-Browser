@@ -23,10 +23,12 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	refresh_button_.setImages(true, true, true, refresh_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	refresh_button_.setSize(32, 32);
 	refresh_button_.addMouseListener(this, false);
+	filter_editor_.addListener(this);
 	addAndMakeVisible(errors_button_);
 	addAndMakeVisible(options_button_);
 	addAndMakeVisible(refresh_button_);
 	addAndMakeVisible(viewport_);
+	addAndMakeVisible(filter_editor_);
 	show_instruments();
     setSize(600, 300);
 
@@ -54,6 +56,7 @@ void MainContentComponent::resized()
 	viewport_.setBounds(10, 10, getWidth() - 20, options_button_.getY() - 20);
 	instrument_viewer_.setSize(instrument_viewer_.getWidth(), viewport_.getHeight() - 20);
 	error_viewer_.setSize(viewport_.getWidth(), error_viewer_.getHeight());
+	filter_editor_.setBounds(getWidth() - 10 - filter_editor_.getWidth(), 10, 100, 20);
 }
 
 void MainContentComponent::mouseDown(const MouseEvent &event)
@@ -231,4 +234,8 @@ void MainContentComponent::no_errors()
 	errors_to_display_ = false;
 
 	errors_button_.setImages(false, true, true, error_icon_, 0.1, Colour(), Image(), 0.1f, Colour(), Image(), 0.1f, Colour(), 0);
+}
+
+void MainContentComponent::textEditorTextChanged(TextEditor & te)
+{
 }
