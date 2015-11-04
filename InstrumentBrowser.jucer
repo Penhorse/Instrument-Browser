@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.0.0"
+<JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.1.0"
               bundleIdentifier="com.pleasesendhelp.InstrumentBrowser" includeBinaryInAppConfig="1"
               jucerVersion="3.2.0">
   <MAINGROUP id="sHgRtS" name="Instrument Browser">
+    <FILE id="hvObcb" name="error.png" compile="0" resource="1" file="Resources/Icons/error.png"/>
     <FILE id="M3RYiV" name="refresh.png" compile="0" resource="1" file="Resources/Icons/refresh.png"/>
     <FILE id="On1c5m" name="instrument.png" compile="0" resource="1" file="Resources/Icons/instrument.png"/>
     <FILE id="CwvxJU" name="options_cog.png" compile="0" resource="1" file="Resources/Icons/options_cog.png"/>
