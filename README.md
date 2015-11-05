@@ -2,7 +2,7 @@
 
 Reaktor instrument browser, designed for working with Reaktor 6 blocks. It doesn't work with instruments from older versions of Reaktor so don't try that. Maybe one day it will WHO KNOWS. Good luck out there champ. Hi.
 
-![ibrows](https://cloud.githubusercontent.com/assets/2492870/10949544/5971a036-832b-11e5-8fd0-4c4c3ffd240c.png)
+![ibrows 1 3](https://cloud.githubusercontent.com/assets/2492870/10982169/afd4c9ac-8403-11e5-9325-1ce74e5ab604.png)
 
 Blocks showing up without an icon isn't a bug, it just means the block developer didn't add an icon. If you find a block that breaks or doesn't show up at all then please submit an issue to the [ismsnoop repository](https://github.com/Penhorse/ismsnoop).
 
