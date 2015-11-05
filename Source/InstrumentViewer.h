@@ -48,7 +48,8 @@ public:
 
 	void set_filter(const String & filter);
 
-	void next_view_mode();
+	void set_view_mode(ViewMode view_mode);
+	ViewMode get_view_mode() const;
 
 private:
 

@@ -56,6 +56,8 @@ private:
 	ImageButton view_mode_button_;;
 	PropertiesFile::Options options_;
 	Image error_icon_;
+	Image one_row_icon_;
+	Image multirow_icon_;
 	Viewport viewport_;
 	std::unique_ptr<InstrumentLoader> instrument_loader_;
 	InstrumentViewer instrument_viewer_;

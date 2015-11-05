@@ -252,16 +252,14 @@ void InstrumentViewer::apply_multirow_view_mode()
 	calculated_height_ += row.height + 10;
 }
 
-void InstrumentViewer::next_view_mode()
+void InstrumentViewer::set_view_mode(ViewMode view_mode)
 {
-	if(view_mode_ == ViewMode::Row)
-	{
-		view_mode_ = ViewMode::MultiRow;
-	}
-	else
-	{
-		view_mode_ = ViewMode::Row;
-	}
+	view_mode_ = view_mode;
 
 	triggerAsyncUpdate();
+}
+
+auto InstrumentViewer::get_view_mode() const -> ViewMode
+{
+	return view_mode_;
 }

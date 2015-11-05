@@ -10,20 +10,22 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	options_component_(options, this),
 	options_(options),
 	error_icon_(ImageFileFormat::loadFrom(BinaryData::error_png, BinaryData::error_pngSize)),
+	one_row_icon_(ImageFileFormat::loadFrom(BinaryData::one_row_png, BinaryData::one_row_pngSize)),
+	multirow_icon_(ImageFileFormat::loadFrom(BinaryData::multirow_png, BinaryData::multirow_pngSize)),
 	error_viewer_(this),
 	errors_to_display_(false)
 {
-	const auto cog_image = ImageFileFormat::loadFrom(BinaryData::options_cog_png, BinaryData::options_cog_pngSize);
-	const auto refresh_image = ImageFileFormat::loadFrom(BinaryData::refresh_png, BinaryData::refresh_pngSize);
+	const auto cog_icon = ImageFileFormat::loadFrom(BinaryData::options_cog_png, BinaryData::options_cog_pngSize);
+	const auto refresh_icon = ImageFileFormat::loadFrom(BinaryData::refresh_png, BinaryData::refresh_pngSize);
 	errors_button_.setSize(24, 24);
 	errors_button_.addMouseListener(this, false);
-	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	options_button_.setImages(false, true, true, cog_icon, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	options_button_.setSize(32, 32);
 	options_button_.addMouseListener(this, false);
-	view_mode_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	view_mode_button_.setImages(false, true, true, one_row_icon_, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	view_mode_button_.setSize(32, 32);
 	view_mode_button_.addMouseListener(this, false);
-	refresh_button_.setImages(true, true, true, refresh_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	refresh_button_.setImages(false, true, true, refresh_icon, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	refresh_button_.setSize(32, 32);
 	refresh_button_.addMouseListener(this, false);
 	filter_editor_.addListener(this);
@@ -122,7 +124,16 @@ void MainContentComponent::handle_refresh_button_clicked()
 
 void MainContentComponent::handle_view_mode_button_clicked()
 {
-	instrument_viewer_.next_view_mode();
+	if (instrument_viewer_.get_view_mode() == InstrumentViewer::ViewMode::MultiRow)
+	{
+		view_mode_button_.setImages(false, true, true, one_row_icon_, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+		instrument_viewer_.set_view_mode(InstrumentViewer::ViewMode::Row);
+	}
+	else
+	{
+		view_mode_button_.setImages(false, true, true, multirow_icon_, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+		instrument_viewer_.set_view_mode(InstrumentViewer::ViewMode::MultiRow);
+	}
 }
 
 void MainContentComponent::handle_options_button_clicked()
