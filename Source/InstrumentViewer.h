@@ -23,12 +23,21 @@
 //==============================================================================
 class InstrumentViewer : public Component, public InstrumentReceiver, public AsyncUpdater
 {
+
 public:
+
+	enum class ViewMode
+	{
+		Row,
+		MultiRow,
+	};
+
     InstrumentViewer();
     ~InstrumentViewer();
 
-    void paint (Graphics&);
-    void resized();
+    void paint(Graphics&) override;
+    void resized() override;
+	void parentSizeChanged() override;
 
 	void receive_instrument(const Instrument & instrument) override;
 	void refresh_instruments() override;
@@ -38,18 +47,32 @@ public:
 	int num_instruments() const;
 
 	void set_filter(const String & filter);
-	void apply_filter();
+
+	void next_view_mode();
 
 private:
 
-	void push_visible_icon(InstrumentIcon * icon);
+	void apply_filter();
+	void apply_view_mode();
+	void apply_row_view_mode();
+	void apply_multirow_view_mode();
+
+	struct IconRow
+	{
+		int height;
+		std::vector<InstrumentIcon*> icons;
+	};
 
 	std::deque<Instrument> instruments_;
 	std::map<const Instrument*, InstrumentIcon*> icons_;
-	std::vector<Component*> visible_icons_;
+	std::vector<InstrumentIcon*> visible_icons_;
 	std::deque<InstrumentIcon*> icons_to_add_;
-	StretchableLayoutManager icon_layout;
+	std::deque<IconRow> icon_rows_;
 	String filter_;
+	ViewMode view_mode_;
+	int calculated_width_;
+	int calculated_height_;
+	int icons_per_row_;
 	std::mutex mutex_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentViewer)
 };

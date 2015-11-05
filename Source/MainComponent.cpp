@@ -20,12 +20,16 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 	options_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	options_button_.setSize(32, 32);
 	options_button_.addMouseListener(this, false);
+	view_mode_button_.setImages(true, true, true, cog_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+	view_mode_button_.setSize(32, 32);
+	view_mode_button_.addMouseListener(this, false);
 	refresh_button_.setImages(true, true, true, refresh_image, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
 	refresh_button_.setSize(32, 32);
 	refresh_button_.addMouseListener(this, false);
 	filter_editor_.addListener(this);
 	addAndMakeVisible(errors_button_);
 	addAndMakeVisible(options_button_);
+	addAndMakeVisible(view_mode_button_);
 	addAndMakeVisible(refresh_button_);
 	addAndMakeVisible(viewport_);
 	addChildComponent(filter_editor_);
@@ -56,10 +60,10 @@ void MainContentComponent::resized()
 	errors_button_.setTopLeftPosition(14, getHeight() - errors_button_.getHeight() - 14);
 	options_button_.setTopLeftPosition(getWidth() - options_button_.getWidth() - 10, getHeight() - options_button_.getHeight() - 10);
 	refresh_button_.setTopLeftPosition(options_button_.getX() - 10 - refresh_button_.getWidth(), getHeight() - refresh_button_.getHeight() - 10);
-	viewport_.setBounds(10, 10, getWidth() - 20, options_button_.getY() - 20);
-	instrument_viewer_.setSize(instrument_viewer_.getWidth(), viewport_.getHeight() - 20);
-	error_viewer_.setSize(viewport_.getWidth(), error_viewer_.getHeight());
+	view_mode_button_.setTopLeftPosition(refresh_button_.getX() - 10 - refresh_button_.getWidth(), getHeight() - refresh_button_.getHeight() - 10);
 	filter_editor_.setBounds(getWidth() - 10 - filter_editor_.getWidth(), 10, 100, 20);
+	viewport_.setBounds(10, filter_editor_.getBottom(), getWidth() - 20, options_button_.getY() - filter_editor_.getBottom() - 10);
+	error_viewer_.setSize(viewport_.getWidth(), error_viewer_.getHeight());
 }
 
 void MainContentComponent::mouseDown(const MouseEvent &event)
@@ -81,6 +85,13 @@ void MainContentComponent::mouseDown(const MouseEvent &event)
 	if (event.originalComponent == &options_button_)
 	{
 		handle_options_button_clicked();
+
+		return;
+	}
+
+	if (event.originalComponent == &view_mode_button_)
+	{
+		handle_view_mode_button_clicked();
 
 		return;
 	}
@@ -107,6 +118,11 @@ void MainContentComponent::handle_errors_button_clicked()
 void MainContentComponent::handle_refresh_button_clicked()
 {
 	reload_instruments();
+}
+
+void MainContentComponent::handle_view_mode_button_clicked()
+{
+	instrument_viewer_.next_view_mode();
 }
 
 void MainContentComponent::handle_options_button_clicked()

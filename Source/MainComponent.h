@@ -23,8 +23,8 @@ public:
 	MainContentComponent(const PropertiesFile::Options & options);
     ~MainContentComponent();
 
-    void paint (Graphics&);
-    void resized();
+    void paint (Graphics&) override;
+    void resized() override;
 
 	void mouseDown(const MouseEvent &event);
 
@@ -46,12 +46,14 @@ private:
 	void handle_errors_button_clicked();
 	void handle_refresh_button_clicked();
 	void handle_options_button_clicked();
+	void handle_view_mode_button_clicked();
 	void set_error_button_opacities(float normal, float over, float down);
 
 	OptionsComponent options_component_;
 	ImageButton errors_button_;
 	ImageButton refresh_button_;
 	ImageButton options_button_;
+	ImageButton view_mode_button_;;
 	PropertiesFile::Options options_;
 	Image error_icon_;
 	Viewport viewport_;

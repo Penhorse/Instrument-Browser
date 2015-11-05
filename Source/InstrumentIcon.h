@@ -51,12 +51,17 @@ public:
 		return width_;
 	}
 
+	int height() const
+	{
+		return height_;
+	}
+
 private:
 
 	Label label_;
 	InstrumentButton button_;
-	StretchableLayoutManager layout_;
 	int width_;
+	int height_;
 	File instrument_file_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentIcon)
 };

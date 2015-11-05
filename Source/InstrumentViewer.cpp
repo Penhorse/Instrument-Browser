@@ -9,10 +9,14 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
+#include <rtw/bits.hpp>
+
 #include "InstrumentViewer.h"
 
 //==============================================================================
-InstrumentViewer::InstrumentViewer()
+InstrumentViewer::InstrumentViewer() :
+	view_mode_(ViewMode::Row)
 {
 	// nothing
 }
@@ -30,9 +34,39 @@ void InstrumentViewer::paint(Graphics& g)
 	// nothing
 }
 
+void InstrumentViewer::parentSizeChanged()
+{
+	apply_view_mode();
+	setSize(calculated_width_, calculated_height_);
+}
+
 void InstrumentViewer::resized()
 {
-	icon_layout.layOutComponents(visible_icons_.data(), visible_icons_.size(), 10, 10, getWidth() - 20, getHeight() - 20, false, true);
+	int row_y = 10;
+
+	for(auto & row : icon_rows_)
+	{
+		StretchableLayoutManager layout;
+
+		int index = 1;
+
+		std::vector<Component*> components;
+
+		for(const auto icon : row.icons)
+		{
+			layout.setItemLayout((index - 1) * 2, icon->width(), icon->width(), icon->width());
+			layout.setItemLayout(((index - 1) * 2) - 1, 10, 10, 10);
+
+			components.push_back(icon);
+			components.push_back(nullptr);
+
+			index++;
+		}
+
+		layout.layOutComponents(components.data(), components.size(), 10, row_y, getWidth() - 20, row.height, false, true);
+
+		row_y += row.height + 10;
+	}
 }
 
 void InstrumentViewer::receive_instrument(const Instrument & instrument)
@@ -78,6 +112,9 @@ void InstrumentViewer::handleAsyncUpdate()
 	icons_to_add_.clear();
 
 	apply_filter();
+	apply_view_mode();
+
+	setSize(calculated_width_, calculated_height_);
 }
 
 int InstrumentViewer::num_instruments() const
@@ -96,17 +133,15 @@ void InstrumentViewer::apply_filter()
 {
 	visible_icons_.clear();
 
-	int total_width = 0;
-
 	if(filter_.isEmpty())
 	{
 		for (const auto & instrument : instruments_)
 		{
 			const auto icon = icons_[&instrument];
 
-			push_visible_icon(icon);
+			icon->setVisible(true);
 
-			total_width += icon->getWidth() + 10;
+			visible_icons_.push_back(icon);
 		}
 	}
 	else
@@ -117,9 +152,9 @@ void InstrumentViewer::apply_filter()
 
 			if(instrument.matches_filter(filter_.toStdString()))
 			{
-				push_visible_icon(icon);
+				icon->setVisible(true);
 
-				total_width += icon->getWidth() + 10;
+				visible_icons_.push_back(icon);
 			}
 			else
 			{
@@ -127,19 +162,106 @@ void InstrumentViewer::apply_filter()
 			}
 		}
 	}
-
-	setSize(total_width, getHeight());
 }
 
-void InstrumentViewer::push_visible_icon(InstrumentIcon * icon)
+void InstrumentViewer::apply_view_mode()
 {
-	const auto index = (visible_icons_.size() / 2) + 1;
+	switch(view_mode_)
+	{
+		case ViewMode::Row:
+		{
+			apply_row_view_mode();
 
-	icon->setVisible(true);
+			return;
+		}
 
-	visible_icons_.push_back(icon);
-	visible_icons_.push_back(nullptr);
+		case ViewMode::MultiRow:
+		{
+			apply_multirow_view_mode();
 
-	icon_layout.setItemLayout((index - 1) * 2, icon->width(), icon->width(), icon->width());
-	icon_layout.setItemLayout(((index - 1) * 2) - 1, 10, 10, 10);
+			return;
+		}
+	}
+}
+
+void InstrumentViewer::apply_row_view_mode()
+{
+	calculated_width_ = 0;
+	calculated_height_ = getParentHeight() - 20;
+
+	icon_rows_.clear();
+
+	IconRow only_row;
+
+	only_row.height = 0;
+
+	int index = 1;
+
+	for(const auto icon : visible_icons_)
+	{
+		calculated_width_ += icon->width() + 10;
+
+		only_row.icons.push_back(icon);
+
+		if(icon->height() > only_row.height)
+		{
+			only_row.height = icon->height();
+		}
+
+		index++;
+	}
+
+	icon_rows_.push_back(only_row);
+}
+
+void InstrumentViewer::apply_multirow_view_mode()
+{
+	calculated_width_ = getParentWidth();
+	calculated_height_ = 0;
+
+	icon_rows_.clear();
+
+	int row_width = 0;
+
+	IconRow row;
+
+	row.height = 0;
+
+	for(const auto icon : visible_icons_)
+	{
+		if(row_width + icon->width() + 10 > calculated_width_)
+		{
+			icon_rows_.push_back(row);
+			calculated_height_ += row.height + 10;
+			row_width = 0;
+			row.height = 0;
+			row.icons.clear();
+		}
+
+		row.icons.push_back(icon);
+
+		if(icon->height() > row.height)
+		{
+			row.height = icon->height();
+		}
+
+		row_width += icon->width() + 10;
+	}
+
+	icon_rows_.push_back(row);
+	calculated_height_ += row.height + 10;
+}
+
+void InstrumentViewer::next_view_mode()
+{
+	if(view_mode_ == ViewMode::Row)
+	{
+		view_mode_ = ViewMode::MultiRow;
+	}
+	else
+	{
+		view_mode_ = ViewMode::Row;
+	}
+
+	triggerAsyncUpdate();
 }

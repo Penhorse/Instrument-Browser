@@ -46,13 +46,14 @@ InstrumentIcon::InstrumentIcon(const Instrument & ism) :
 	addAndMakeVisible(button_);
 
 	width_ = std::max(image.getWidth(), 100);
+	height_ = std::max(image.getHeight(), 100) + 50;
 
-	setSize(width_, image.getHeight());
+	setSize(width_, height_);
 
-	layout_.setItemLayout(0, 0, -1, -.25);
-	layout_.setItemLayout(1, image.getHeight(), image.getHeight(), image.getHeight());
-	layout_.setItemLayout(2, 10, 10, 10);
-	layout_.setItemLayout(3, 0, -1, -.25);
+//	layout_.setItemLayout(0, 0, -1, -.25);
+//	layout_.setItemLayout(1, image.getHeight(), image.getHeight(), image.getHeight());
+//	layout_.setItemLayout(2, 10, 10, 10);
+//	layout_.setItemLayout(3, 0, -1, -.25);
 }
 
 InstrumentIcon::~InstrumentIcon()
@@ -62,13 +63,11 @@ InstrumentIcon::~InstrumentIcon()
 
 void InstrumentIcon::paint (Graphics& g)
 {
-	g.setFillType(Colour());
-	g.drawRect(button_.getBounds(), 10.0f);
+	// nothing
 }
 
 void InstrumentIcon::resized()
 {
-	Component * components[] = { 0, &button_, 0, &label_ };
-
-	layout_.layOutComponents(components, 4, 0, 0, width_, getHeight(), true, true);
+	button_.setBounds(0, 0, width_, height_ - 50);
+	label_.setBounds(0, button_.getBottom() + 10, width_, height_ - button_.getBottom() - 10);
 }
