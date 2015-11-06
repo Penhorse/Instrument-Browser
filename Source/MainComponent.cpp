@@ -173,7 +173,7 @@ void MainContentComponent::show_errors()
 	instrument_viewer_.setVisible(false);
 	error_viewer_.setVisible(true);
 	viewport_.setViewedComponent(&error_viewer_, false);
-//	resized();
+	resized();
 }
 
 void MainContentComponent::show_instruments()
@@ -182,7 +182,7 @@ void MainContentComponent::show_instruments()
 	instrument_viewer_.setVisible(true);
 	error_viewer_.setVisible(false);
 	viewport_.setViewedComponent(&instrument_viewer_, false);
-//	resized();
+	resized();
 }
 
 void MainContentComponent::report_fatal_error(const std::string & error)
