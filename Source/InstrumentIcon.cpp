@@ -81,11 +81,6 @@ InstrumentIcon::InstrumentIcon(const Instrument & ism) :
 	height_ = std::max(image.getHeight(), 100) + 50;
 
 	setSize(width_, height_);
-
-//	layout_.setItemLayout(0, 0, -1, -.25);
-//	layout_.setItemLayout(1, image.getHeight(), image.getHeight(), image.getHeight());
-//	layout_.setItemLayout(2, 10, 10, 10);
-//	layout_.setItemLayout(3, 0, -1, -.25);
 }
 
 InstrumentIcon::~InstrumentIcon()

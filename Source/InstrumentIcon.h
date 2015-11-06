@@ -29,15 +29,18 @@ private:
 
 	File file_;
 };
+
 //==============================================================================
 class InstrumentIcon : public Component
 {
-public:
-    InstrumentIcon(const Instrument & ism);
-    ~InstrumentIcon();
 
-    void paint (Graphics&);
-    void resized();
+public:
+
+	InstrumentIcon(const Instrument & ism);
+	~InstrumentIcon();
+
+	void paint (Graphics&);
+	void resized();
 
 	int width() const
 	{
@@ -56,7 +59,8 @@ private:
 	int width_;
 	int height_;
 	File instrument_file_;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentIcon)
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentIcon)
 };
 
 
