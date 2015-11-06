@@ -54,7 +54,7 @@ MainContentComponent::~MainContentComponent()
 
 void MainContentComponent::paint (Graphics& g)
 {
-    g.fillAll(Colour (0xff001F36));
+    g.fillAll(Colour (0xff2D3134));
 }
 
 void MainContentComponent::resized()
