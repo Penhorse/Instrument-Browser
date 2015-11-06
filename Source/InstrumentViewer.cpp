@@ -72,7 +72,7 @@ void InstrumentViewer::lay_out_icons()
 			index++;
 		}
 
-		layout.layOutComponents(components.data(), components.size(), 10, row_y, getWidth() - 20, row.height, false, true);
+		layout.layOutComponents(components.data(), components.size(), ((getWidth() - row.width) / 2), row_y, getWidth(), row.height, false, true);
 
 		row_y += row.height + 10;
 	}
@@ -214,6 +214,8 @@ void InstrumentViewer::apply_row_view_mode()
 		}
 	}
 
+	only_row.width = calculated_width_;
+
 	icon_rows_.push_back(only_row);
 }
 
@@ -224,19 +226,18 @@ void InstrumentViewer::apply_multirow_view_mode()
 
 	icon_rows_.clear();
 
-	int row_width = 0;
-
 	IconRow row;
 
 	row.height = 0;
+	row.width = 0;
 
 	for(const auto icon : visible_icons_)
 	{
-		if(row_width + icon->width() + 10 > calculated_width_)
+		if(row.width + icon->width() + 10 > calculated_width_)
 		{
 			icon_rows_.push_back(row);
 			calculated_height_ += row.height + 10;
-			row_width = 0;
+			row.width = 0;
 			row.height = 0;
 			row.icons.clear();
 		}
@@ -248,7 +249,7 @@ void InstrumentViewer::apply_multirow_view_mode()
 			row.height = icon->height();
 		}
 
-		row_width += icon->width() + 10;
+		row.width += icon->width() + 10;
 	}
 
 	icon_rows_.push_back(row);

@@ -62,6 +62,7 @@ private:
 	struct IconRow
 	{
 		int height;
+		int width;
 		std::vector<InstrumentIcon*> icons;
 	};
 
