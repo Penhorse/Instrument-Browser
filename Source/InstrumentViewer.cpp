@@ -36,11 +36,18 @@ void InstrumentViewer::paint(Graphics& g)
 
 void InstrumentViewer::parentSizeChanged()
 {
-	apply_view_mode();
-	setSize(calculated_width_, calculated_height_);
+	if (isVisible())
+	{
+		apply_view_mode();
+	}
 }
 
 void InstrumentViewer::resized()
+{
+	lay_out_icons();
+}
+
+void InstrumentViewer::lay_out_icons()
 {
 	int row_y = 10;
 
@@ -56,6 +63,8 @@ void InstrumentViewer::resized()
 		{
 			layout.setItemLayout((index - 1) * 2, icon->width(), icon->width(), icon->width());
 			layout.setItemLayout(((index - 1) * 2) - 1, 10, 10, 10);
+
+			icon->setVisible(true);
 
 			components.push_back(icon);
 			components.push_back(nullptr);
@@ -114,7 +123,7 @@ void InstrumentViewer::handleAsyncUpdate()
 	apply_filter();
 	apply_view_mode();
 
-	setSize(calculated_width_, calculated_height_);
+	lay_out_icons();
 }
 
 int InstrumentViewer::num_instruments() const
@@ -139,8 +148,6 @@ void InstrumentViewer::apply_filter()
 		{
 			const auto icon = icons_[&instrument];
 
-			icon->setVisible(true);
-
 			visible_icons_.push_back(icon);
 		}
 	}
@@ -152,8 +159,6 @@ void InstrumentViewer::apply_filter()
 
 			if(instrument.matches_filter(filter_.toStdString()))
 			{
-				icon->setVisible(true);
-
 				visible_icons_.push_back(icon);
 			}
 			else
@@ -172,16 +177,18 @@ void InstrumentViewer::apply_view_mode()
 		{
 			apply_row_view_mode();
 
-			return;
+			break;
 		}
 
 		case ViewMode::MultiRow:
 		{
 			apply_multirow_view_mode();
 
-			return;
+			break;
 		}
 	}
+
+	setSize(calculated_width_, calculated_height_);
 }
 
 void InstrumentViewer::apply_row_view_mode()
@@ -195,8 +202,6 @@ void InstrumentViewer::apply_row_view_mode()
 
 	only_row.height = 0;
 
-	int index = 1;
-
 	for(const auto icon : visible_icons_)
 	{
 		calculated_width_ += icon->width() + 10;
@@ -207,8 +212,6 @@ void InstrumentViewer::apply_row_view_mode()
 		{
 			only_row.height = icon->height();
 		}
-
-		index++;
 	}
 
 	icon_rows_.push_back(only_row);

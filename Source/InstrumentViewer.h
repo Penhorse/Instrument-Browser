@@ -57,6 +57,7 @@ private:
 	void apply_view_mode();
 	void apply_row_view_mode();
 	void apply_multirow_view_mode();
+	void lay_out_icons();
 
 	struct IconRow
 	{

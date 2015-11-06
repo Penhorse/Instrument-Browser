@@ -5,6 +5,32 @@
 
 #include "ISMSnoopWrapper.h"
 
+static const auto MENU_BUTTON_SIZE = 32;
+static const auto MENU_BUTTON_OPACITY_NORMAL = 0.5f;
+static const auto MENU_BUTTON_OPACITY_OVER = 1.0f;
+static const auto MENU_BUTTON_OPACITY_DOWN = 1.0f;
+
+static void set_menu_button_image(ImageButton * button, const Image & image)
+{
+	button->setImages(false, true, true, image, MENU_BUTTON_OPACITY_NORMAL, Colour(), Image(), MENU_BUTTON_OPACITY_OVER, Colour(), Image(), MENU_BUTTON_OPACITY_DOWN, Colour(), 0);
+}
+
+static void setup_menu_button(ImageButton * button, const Image & image, MouseListener * listener)
+{
+	set_menu_button_image(button, image);
+
+	button->setSize(MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
+	button->addMouseListener(listener, false);
+}
+
+void MainContentComponent::add_and_make_visible(const std::deque<Component*> & components)
+{
+	for(const auto c : components)
+	{
+		addAndMakeVisible(c);
+	}
+}
+
 //==============================================================================
 MainContentComponent::MainContentComponent(const PropertiesFile::Options & options) :
 	options_component_(options, this),
@@ -17,25 +43,25 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 {
 	const auto cog_icon = ImageFileFormat::loadFrom(BinaryData::options_cog_png, BinaryData::options_cog_pngSize);
 	const auto refresh_icon = ImageFileFormat::loadFrom(BinaryData::refresh_png, BinaryData::refresh_pngSize);
+
 	errors_button_.setSize(24, 24);
 	errors_button_.addMouseListener(this, false);
-	options_button_.setImages(false, true, true, cog_icon, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
-	options_button_.setSize(32, 32);
-	options_button_.addMouseListener(this, false);
-	view_mode_button_.setImages(false, true, true, one_row_icon_, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
-	view_mode_button_.setSize(32, 32);
-	view_mode_button_.addMouseListener(this, false);
-	refresh_button_.setImages(false, true, true, refresh_icon, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
-	refresh_button_.setSize(32, 32);
-	refresh_button_.addMouseListener(this, false);
-	filter_editor_.addListener(this);
-	addAndMakeVisible(errors_button_);
-	addAndMakeVisible(options_button_);
-	addAndMakeVisible(view_mode_button_);
-	addAndMakeVisible(refresh_button_);
-	addAndMakeVisible(viewport_);
-	addChildComponent(filter_editor_);
 
+	setup_menu_button(&options_button_, cog_icon, this);
+	setup_menu_button(&refresh_button_, refresh_icon, this);
+	setup_menu_button(&view_mode_button_, one_row_icon_, this);
+
+	add_and_make_visible(
+	{
+		&errors_button_,
+		&options_button_,
+		&view_mode_button_,
+		&refresh_button_,
+		&viewport_
+	});
+				
+	addChildComponent(filter_editor_);
+	filter_editor_.addListener(this);
 	filter_editor_.grabKeyboardFocus();
 
     setSize(600, 300);
@@ -126,12 +152,12 @@ void MainContentComponent::handle_view_mode_button_clicked()
 {
 	if (instrument_viewer_.get_view_mode() == InstrumentViewer::ViewMode::MultiRow)
 	{
-		view_mode_button_.setImages(false, true, true, one_row_icon_, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+		set_menu_button_image(&view_mode_button_, one_row_icon_);
 		instrument_viewer_.set_view_mode(InstrumentViewer::ViewMode::Row);
 	}
 	else
 	{
-		view_mode_button_.setImages(false, true, true, multirow_icon_, 0.5f, Colour(), Image(), 1.0f, Colour(), Image(), 1.0f, Colour(), 0);
+		set_menu_button_image(&view_mode_button_, multirow_icon_);
 		instrument_viewer_.set_view_mode(InstrumentViewer::ViewMode::MultiRow);
 	}
 }
@@ -147,7 +173,7 @@ void MainContentComponent::show_errors()
 	instrument_viewer_.setVisible(false);
 	error_viewer_.setVisible(true);
 	viewport_.setViewedComponent(&error_viewer_, false);
-	resized();
+//	resized();
 }
 
 void MainContentComponent::show_instruments()
@@ -156,35 +182,18 @@ void MainContentComponent::show_instruments()
 	instrument_viewer_.setVisible(true);
 	error_viewer_.setVisible(false);
 	viewport_.setViewedComponent(&instrument_viewer_, false);
-	resized();
+//	resized();
 }
 
-void MainContentComponent::reload_instruments()
+void MainContentComponent::report_fatal_error(const std::string & error)
 {
-	if(instrument_loader_)
-	{
-		instrument_loader_->stopThread(-1);
-	}
+	error_viewer_.receive_error(error);
 
-	error_viewer_.clear_errors();
+	show_errors();
+}
 
-	instrument_viewer_.refresh_instruments();
-
-	const auto ismsnoop = std::make_shared<ISMSnoopWrapper>();
-
-	if (!ismsnoop->load())
-	{
-		std::stringstream ss;
-
-		ss << "Failed to load " + ismsnoop->library_filename() + ".";
-
-		error_viewer_.receive_error(ss.str());
-
-		show_errors();
-
-		return;
-	}
-
+StringArray MainContentComponent::get_directories() const
+{
 	ApplicationProperties props;
 
 	props.setStorageParameters(options_);
@@ -195,23 +204,69 @@ void MainContentComponent::reload_instruments()
 
 	if (directories_string.isEmpty())
 	{
-		error_viewer_.receive_error("No library directories specified.");
-
-		show_errors();
-
-		return;
+		return StringArray();
 	}
 
-	StringArray directories;
+	StringArray result;
 
 	std::stringstream ss(directories_string.toStdString());
 	std::string directory;
 
 	while (std::getline(ss, directory, '\n'))
 	{
-		directories.add(directory);
+		result.add(directory);
 	}
-	
+
+	return result;
+}
+
+void MainContentComponent::reload_instruments()
+{
+	//
+	// stop the instrument loader if it's already running
+	//
+	if(instrument_loader_)
+	{
+		instrument_loader_->stopThread(-1);
+	}
+
+	//
+	// clear current errors and loaded instruments
+	//
+	error_viewer_.clear_errors();
+	instrument_viewer_.refresh_instruments();
+
+	//
+	// load ismsnoop
+	//
+	const auto ismsnoop = std::make_shared<ISMSnoopWrapper>();
+
+	if (!ismsnoop->load())
+	{
+		std::stringstream ss;
+
+		ss << "Failed to load " + ismsnoop->library_filename() + ".";
+
+		report_fatal_error(ss.str());
+
+		return;
+	}
+
+	//
+	// get directories from options
+	//
+	const auto directories = get_directories();
+
+	if (directories.size() == 0)
+	{
+		report_fatal_error("No library directories specified.");
+
+		return;
+	}
+
+	//
+	// start the instrument loader
+	//
 	instrument_loader_ =
 		std::unique_ptr<InstrumentLoader>(
 				new InstrumentLoader(
@@ -225,6 +280,7 @@ void MainContentComponent::reload_instruments()
 
 void MainContentComponent::handle_options_changed()
 {
+	show_instruments();
 	reload_instruments();
 }
 
