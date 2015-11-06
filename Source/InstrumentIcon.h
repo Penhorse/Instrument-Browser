@@ -21,22 +21,15 @@ class InstrumentButton : public ImageButton
 
 public:
 
-	InstrumentButton(File file) :
-		file_(file)
-	{
-		// nothing
-	}
+	InstrumentButton(File file);
 
-	void clicked() override
-	{
-		file_.startAsProcess();
-	}
+	void clicked(const ModifierKeys & modifier_keys);
 
 private:
 
 	File file_;
 };
-
+//==============================================================================
 class InstrumentIcon : public Component
 {
 public:
