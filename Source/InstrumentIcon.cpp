@@ -12,6 +12,38 @@
 #include "InstrumentIcon.h"
 
 //==============================================================================
+InstrumentButton::InstrumentButton(File file) :
+	file_(file)
+{
+	// nothing
+}
+
+void InstrumentButton::clicked(const ModifierKeys & modifier_keys)
+{
+	if(modifier_keys.isLeftButtonDown())
+	{
+		file_.startAsProcess();
+		return;
+	}
+
+	if(modifier_keys.isRightButtonDown())
+	{
+		PopupMenu menu;
+
+		menu.addItem(1, "Show in folder");
+
+		const auto result = menu.show();
+
+		if(result == 1)
+		{
+			file_.revealToUser();
+		}
+
+		return;
+	}
+}
+
+//==============================================================================
 InstrumentIcon::InstrumentIcon(const Instrument & ism) :
 	label_(String::empty, ism.name),
 	button_(File(ism.path))
