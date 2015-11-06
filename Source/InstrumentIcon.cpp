@@ -30,7 +30,7 @@ void InstrumentButton::clicked(const ModifierKeys & modifier_keys)
 	{
 		PopupMenu menu;
 
-		menu.addItem(1, "Show in folder");
+		menu.addItem(1, "Open file location");
 
 		const auto result = menu.show();
 
