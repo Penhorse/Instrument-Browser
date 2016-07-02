@@ -8,6 +8,7 @@ static PropertiesFile::Options make_options()
 	result.applicationName = "Instrument Browser";
 	result.folderName = "InstrumentBrowser";
 	result.filenameSuffix = ".properties";
+    result.osxLibrarySubFolder = "Application Support";
 
 	return result;
 }

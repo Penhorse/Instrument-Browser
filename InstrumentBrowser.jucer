@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.3.1"
               bundleIdentifier="com.pleasesendhelp.InstrumentBrowser" includeBinaryInAppConfig="1"
-              jucerVersion="3.2.0">
+              jucerVersion="4.2.1">
   <MAINGROUP id="sHgRtS" name="Instrument Browser">
     <FILE id="kVcGPP" name="multirow.png" compile="0" resource="1" file="Resources/Icons/multirow.png"/>
     <FILE id="c5458q" name="one_row.png" compile="0" resource="1" file="Resources/Icons/one_row.png"/>
@@ -87,6 +87,27 @@
         <MODULEPATH id="juce_core" path="JuceLibraryCode/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Instrument Browser"
+                       headerPath="../../submodules/ismsnoop/library/include&#10;../../submodules/ismsnoop/submodules/rtw/include"
+                       libraryPath="/usr/X11R6/lib/" osxSDK="10.9 SDK" osxCompatibility="10.9 SDK"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Instrument Browser"
+                       headerPath="../../submodules/ismsnoop/library/include&#10;../../submodules/ismsnoop/submodules/rtw/include"
+                       libraryPath="/usr/X11R6/lib/" osxSDK="10.9 SDK" osxCompatibility="10.9 SDK"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../juce"/>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>
@@ -100,4 +121,7 @@
     <MODULES id="juce_video" showAllCode="1" useLocalCopy="1"/>
   </MODULES>
   <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

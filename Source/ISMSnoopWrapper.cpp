@@ -10,6 +10,8 @@
 
 #include "ISMSnoopWrapper.h"
 
+#include <deque>
+
 ISMSnoopWrapper::ISMSnoopWrapper() :
 	library_(library_filename())
 {
@@ -18,10 +20,26 @@ ISMSnoopWrapper::ISMSnoopWrapper() :
 
 bool ISMSnoopWrapper::load()
 {
-	if (!library_.load())
+#if JUCE_MAC
+    //assumes libismsnoop.dylib has been placed inside InstrumentBrowser.app/Contents/MacOS
+    
+    const std::string libSearchPath =
+        File::getSpecialLocation(File::invokedExecutableFile).getParentDirectory().getFullPathName().toStdString();
+    const std::deque<std::string> libSearchPaths {libSearchPath};
+    
+	if (!library_.load(libSearchPaths))
 	{
 		return false;
 	}
+    
+#else
+    
+    if (!library_.load())
+    {
+        return false;
+    }
+    
+#endif
 	
 	if (!(open = library_.get_function<Sig_ismsnoop_open>("ismsnoop_open"))) return false;
 	if (!(close = library_.get_function<Sig_ismsnoop_close>("ismsnoop_close"))) return false;
@@ -34,6 +52,6 @@ bool ISMSnoopWrapper::load()
 
 std::string ISMSnoopWrapper::library_filename()
 {
-	return rtw::dylib::get_filename("ismsnoop");
+    return rtw::dylib::get_filename("ismsnoop");
 }
 

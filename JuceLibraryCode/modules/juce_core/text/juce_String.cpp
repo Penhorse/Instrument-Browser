@@ -319,7 +319,7 @@ String::String (const char* const t)
         because there's no other way to represent these strings in a way that isn't dependent on
         the compiler, source code editor and platform.
 
-        Note that the Introjucer has a handy string literal generator utility that will convert
+        Note that the Projucer has a handy string literal generator utility that will convert
         any unicode string to a valid C++ string literal, creating ascii escape sequences that will
         work in any compiler.
     */
@@ -342,7 +342,7 @@ String::String (const char* const t, const size_t maxChars)
         because there's no other way to represent these strings in a way that isn't dependent on
         the compiler, source code editor and platform.
 
-        Note that the Introjucer has a handy string literal generator utility that will convert
+        Note that the Projucer has a handy string literal generator utility that will convert
         any unicode string to a valid C++ string literal, creating ascii escape sequences that will
         work in any compiler.
     */
@@ -430,7 +430,22 @@ namespace NumberToStringConverters
         return t;
     }
 
-    static char* numberToString (char* t, unsigned int v) noexcept
+    static char* numberToString (char* t, const unsigned int v) noexcept
+    {
+        return printDigits (t, v);
+    }
+
+    static char* numberToString (char* t, const long n) noexcept
+    {
+        if (n >= 0)
+            return printDigits (t, static_cast<unsigned long> (n));
+
+        t = printDigits (t, static_cast<unsigned long> (-(n + 1)) + 1);
+        *--t = '-';
+        return t;
+    }
+
+    static char* numberToString (char* t, const unsigned long v) noexcept
     {
         return printDigits (t, v);
     }
@@ -517,6 +532,8 @@ String::String (const short number)          : text (NumberToStringConverters::c
 String::String (const unsigned short number) : text (NumberToStringConverters::createFromInteger ((unsigned int) number)) {}
 String::String (const int64  number)         : text (NumberToStringConverters::createFromInteger (number)) {}
 String::String (const uint64 number)         : text (NumberToStringConverters::createFromInteger (number)) {}
+String::String (const long number)           : text (NumberToStringConverters::createFromInteger (number)) {}
+String::String (const unsigned long number)  : text (NumberToStringConverters::createFromInteger (number)) {}
 
 String::String (const float  number)         : text (NumberToStringConverters::createFromDouble ((double) number, 0)) {}
 String::String (const double number)         : text (NumberToStringConverters::createFromDouble (number, 0)) {}
@@ -795,33 +812,28 @@ String& String::operator+= (const juce_wchar ch)
 }
 #endif
 
-String& String::operator+= (const int number)
+namespace StringHelpers
 {
-    char buffer [16];
-    char* end = buffer + numElementsInArray (buffer);
-    char* start = NumberToStringConverters::numberToString (end, number);
+    template <typename T>
+    inline String& operationAddAssign (String& str, const T number)
+    {
+        char buffer [(sizeof(T) * 8) / 2];
+        char* end = buffer + numElementsInArray (buffer);
+        char* start = NumberToStringConverters::numberToString (end, number);
 
-   #if (JUCE_STRING_UTF_TYPE == 8)
-    appendCharPointer (CharPointerType (start), CharPointerType (end));
-   #else
-    appendCharPointer (CharPointer_ASCII (start), CharPointer_ASCII (end));
-   #endif
-    return *this;
+       #if JUCE_STRING_UTF_TYPE == 8
+        str.appendCharPointer (String::CharPointerType (start), String::CharPointerType (end));
+       #else
+        str.appendCharPointer (CharPointer_ASCII (start), CharPointer_ASCII (end));
+       #endif
+
+        return str;
+    }
 }
 
-String& String::operator+= (int64 number)
-{
-    char buffer [32];
-    char* end = buffer + numElementsInArray (buffer);
-    char* start = NumberToStringConverters::numberToString (end, number);
-
-   #if (JUCE_STRING_UTF_TYPE == 8)
-    appendCharPointer (CharPointerType (start), CharPointerType (end));
-   #else
-    appendCharPointer (CharPointer_ASCII (start), CharPointer_ASCII (end));
-   #endif
-    return *this;
-}
+String& String::operator+= (const int number)          { return StringHelpers::operationAddAssign<int>          (*this, number); }
+String& String::operator+= (const int64 number)        { return StringHelpers::operationAddAssign<int64>        (*this, number); }
+String& String::operator+= (const uint64 number)       { return StringHelpers::operationAddAssign<uint64>       (*this, number); }
 
 //==============================================================================
 JUCE_API String JUCE_CALLTYPE operator+ (const char* const s1, const String& s2)    { String s (s1); return s += s2; }
@@ -853,11 +865,13 @@ JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, StringRef s2)            
 
 JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const int number)            { return s1 += number; }
 JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const short number)          { return s1 += (int) number; }
-JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const long number)           { return s1 += (int) number; }
+JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const unsigned short number) { return s1 += (uint64) number; }
+JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const long number)           { return s1 += String (number); }
+JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const unsigned long number)  { return s1 += String (number); }
 JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const int64 number)          { return s1 += String (number); }
+JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const uint64 number)         { return s1 += String (number); }
 JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const float number)          { return s1 += String (number); }
 JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const double number)         { return s1 += String (number); }
-JUCE_API String& JUCE_CALLTYPE operator<< (String& s1, const uint64 number)         { return s1 += String (number); }
 
 JUCE_API OutputStream& JUCE_CALLTYPE operator<< (OutputStream& stream, const String& text)
 {
@@ -1373,6 +1387,10 @@ String String::replaceCharacter (const juce_wchar charToReplace, const juce_wcha
 
 String String::replaceCharacters (StringRef charactersToReplace, StringRef charactersToInsertInstead) const
 {
+    // Each character in the first string must have a matching one in the
+    // second, so the two strings must be the same length.
+    jassert (charactersToReplace.length() == charactersToInsertInstead.length());
+
     StringCreationHelper builder (text);
 
     for (;;)
@@ -1934,7 +1952,7 @@ String String::toHexString (const void* const d, const int size, const int group
 
     String s (PreallocationBytes (sizeof (CharPointerType::CharType) * (size_t) numChars));
 
-    const unsigned char* data = static_cast <const unsigned char*> (d);
+    const unsigned char* data = static_cast<const unsigned char*> (d);
     CharPointerType dest (s.text);
 
     for (int i = 0; i < size; ++i)
@@ -1955,7 +1973,18 @@ int   String::getHexValue32() const noexcept    { return CharacterFunctions::Hex
 int64 String::getHexValue64() const noexcept    { return CharacterFunctions::HexParser<int64>::parse (text); }
 
 //==============================================================================
-String String::createStringFromData (const void* const unknownData, const int size)
+static String getStringFromWindows1252Codepage (const char* data, size_t num)
+{
+    HeapBlock<juce_wchar> unicode (num + 1);
+
+    for (size_t i = 0; i < num; ++i)
+        unicode[i] = CharacterFunctions::getUnicodeCharFromWindows1252Codepage ((uint8) data[i]);
+
+    unicode[num] = 0;
+    return CharPointer_UTF32 (unicode);
+}
+
+String String::createStringFromData (const void* const unknownData, int size)
 {
     const uint8* const data = static_cast<const uint8*> (unknownData);
 
@@ -1989,13 +2018,19 @@ String String::createStringFromData (const void* const unknownData, const int si
         return builder.result;
     }
 
-    const uint8* start = data;
+    const char* start = (const char*) data;
 
     if (size >= 3 && CharPointer_UTF8::isByteOrderMark (data))
+    {
         start += 3;
+        size -= 3;
+    }
 
-    return String (CharPointer_UTF8 ((const char*) start),
-                   CharPointer_UTF8 ((const char*) (data + size)));
+    if (CharPointer_UTF8::isValidString (start, size))
+        return String (CharPointer_UTF8 (start),
+                       CharPointer_UTF8 (start + size));
+
+    return getStringFromWindows1252Codepage (start, (size_t) size);
 }
 
 //==============================================================================
@@ -2174,7 +2209,8 @@ StringRef::StringRef (const String& string) noexcept  : text (string.getCharPoin
 //==============================================================================
 //==============================================================================
 #if JUCE_UNIT_TESTS
-
+ #define STRINGIFY2(X) #X
+ #define STRINGIFY(X) STRINGIFY2(X)
 class StringTests  : public UnitTest
 {
 public:
@@ -2324,6 +2360,116 @@ public:
             expect (s2 == "1234567890xyz123123");
             s2 << StringRef ("def");
             expect (s2 == "1234567890xyz123123def");
+
+            // int16
+            {
+                String numStr (std::numeric_limits<int16>::max());
+                expect (numStr == "32767");
+            }
+            {
+                String numStr (std::numeric_limits<int16>::min());
+                expect (numStr == "-32768");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<int16>::max();
+                expect (numStr == "32767");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<int16>::min();
+                expect (numStr == "-32768");
+            }
+            // uint16
+            {
+                String numStr (std::numeric_limits<uint16>::max());
+                expect (numStr == "65535");
+            }
+            {
+                String numStr (std::numeric_limits<uint16>::min());
+                expect (numStr == "0");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<uint16>::max();
+                expect (numStr == "65535");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<uint16>::min();
+                expect (numStr == "0");
+            }
+            // int32
+            {
+                String numStr (std::numeric_limits<int32>::max());
+                expect (numStr == "2147483647");
+            }
+            {
+                String numStr (std::numeric_limits<int32>::min());
+                expect (numStr == "-2147483648");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<int32>::max();
+                expect (numStr == "2147483647");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<int32>::min();
+                expect (numStr == "-2147483648");
+            }
+            // uint32
+            {
+                String numStr (std::numeric_limits<uint32>::max());
+                expect (numStr == "4294967295");
+            }
+            {
+                String numStr (std::numeric_limits<uint32>::min());
+                expect (numStr == "0");
+            }
+            // int64
+            {
+                String numStr (std::numeric_limits<int64>::max());
+                expect (numStr == "9223372036854775807");
+            }
+            {
+                String numStr (std::numeric_limits<int64>::min());
+                expect (numStr == "-9223372036854775808");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<int64>::max();
+                expect (numStr == "9223372036854775807");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<int64>::min();
+                expect (numStr == "-9223372036854775808");
+            }
+            // uint64
+            {
+                String numStr (std::numeric_limits<uint64>::max());
+                expect (numStr == "18446744073709551615");
+            }
+            {
+                String numStr (std::numeric_limits<uint64>::min());
+                expect (numStr == "0");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<uint64>::max();
+                expect (numStr == "18446744073709551615");
+            }
+            {
+                String numStr;
+                numStr << std::numeric_limits<uint64>::min();
+                expect (numStr == "0");
+            }
+            // size_t
+            {
+                String numStr (std::numeric_limits<size_t>::min());
+                expect (numStr == "0");
+            }
 
             beginTest ("Numeric conversions");
             expect (String::empty.getIntValue() == 0);
