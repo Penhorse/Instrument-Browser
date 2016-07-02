@@ -68,10 +68,27 @@ MainContentComponent::MainContentComponent(const PropertiesFile::Options & optio
 
 	show_instruments();
 	reload_instruments();
+
+	ApplicationProperties props;
+
+	props.setStorageParameters(options);
+
+	const auto user_settings = props.getUserSettings();
+
+	set_view_mode(InstrumentViewer::ViewMode(user_settings->getIntValue("view mode", int(InstrumentViewer::ViewMode::Row))));
 }
 
 MainContentComponent::~MainContentComponent()
 {
+	ApplicationProperties props;
+
+	props.setStorageParameters(options_);
+
+	const auto user_settings = props.getUserSettings();
+
+	user_settings->setValue("view mode", int(instrument_viewer_.get_view_mode()));
+	user_settings->saveIfNeeded();
+
 	if(instrument_loader_)
 	{
 		instrument_loader_->stopThread(500);
@@ -148,18 +165,35 @@ void MainContentComponent::handle_refresh_button_clicked()
 	reload_instruments();
 }
 
-void MainContentComponent::handle_view_mode_button_clicked()
+static InstrumentViewer::ViewMode toggle_view_mode(InstrumentViewer::ViewMode view_mode)
 {
-	if (instrument_viewer_.get_view_mode() == InstrumentViewer::ViewMode::MultiRow)
+	if (view_mode == InstrumentViewer::ViewMode::MultiRow)
 	{
-		set_menu_button_image(&view_mode_button_, one_row_icon_);
-		instrument_viewer_.set_view_mode(InstrumentViewer::ViewMode::Row);
+		return InstrumentViewer::ViewMode::Row;
 	}
 	else
 	{
-		set_menu_button_image(&view_mode_button_, multirow_icon_);
-		instrument_viewer_.set_view_mode(InstrumentViewer::ViewMode::MultiRow);
+		return InstrumentViewer::ViewMode::MultiRow;
 	}
+}
+
+void MainContentComponent::handle_view_mode_button_clicked()
+{
+	set_view_mode(toggle_view_mode(instrument_viewer_.get_view_mode()));
+}
+
+void MainContentComponent::set_view_mode(InstrumentViewer::ViewMode view_mode)
+{
+	if (view_mode == InstrumentViewer::ViewMode::MultiRow)
+	{
+		set_menu_button_image(&view_mode_button_, multirow_icon_);	
+	}
+	else
+	{
+		set_menu_button_image(&view_mode_button_, one_row_icon_);
+	}
+
+	instrument_viewer_.set_view_mode(view_mode);
 }
 
 void MainContentComponent::handle_options_button_clicked()

@@ -47,6 +47,7 @@ private:
 	void handle_refresh_button_clicked();
 	void handle_options_button_clicked();
 	void handle_view_mode_button_clicked();
+	void set_view_mode(InstrumentViewer::ViewMode view_mode);
 	void set_error_button_opacities(float normal, float over, float down);
 	void add_and_make_visible(const std::deque<Component*> & components);
 	void report_fatal_error(const std::string & error);

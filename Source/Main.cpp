@@ -32,6 +32,16 @@ public:
 
     void shutdown() override
     {
+		ApplicationProperties props;
+
+		props.setStorageParameters(options_);
+
+		const auto user_settings = props.getUserSettings();
+
+		user_settings->setValue("window state", mainWindow->getWindowStateAsString());
+
+		user_settings->saveIfNeeded();
+
         mainWindow = nullptr;
     }
 
@@ -57,6 +67,15 @@ public:
             setContentOwned (&main_content_, true);
 
             centreWithSize (getWidth(), getHeight());
+
+			ApplicationProperties props;
+
+			props.setStorageParameters(options);
+
+			const auto user_settings = props.getUserSettings();
+
+			restoreWindowStateFromString(user_settings->getValue("window state"));
+
             setVisible (true);
 			setResizable(true, true);
         }
