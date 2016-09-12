@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.4.0"
+<JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.5.0"
               bundleIdentifier="com.pleasesendhelp.InstrumentBrowser" includeBinaryInAppConfig="1"
               jucerVersion="4.2.3">
   <MAINGROUP id="sHgRtS" name="Instrument Browser">
