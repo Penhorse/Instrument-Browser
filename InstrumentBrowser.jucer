@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="RuXVlW" name="Instrument Browser" projectType="guiapp" version="1.4.0"
               bundleIdentifier="com.pleasesendhelp.InstrumentBrowser" includeBinaryInAppConfig="1"
-              jucerVersion="4.2.1">
+              jucerVersion="4.2.3">
   <MAINGROUP id="sHgRtS" name="Instrument Browser">
     <FILE id="kVcGPP" name="multirow.png" compile="0" resource="1" file="Resources/Icons/multirow.png"/>
     <FILE id="c5458q" name="one_row.png" compile="0" resource="1" file="Resources/Icons/one_row.png"/>
