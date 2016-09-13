@@ -87,7 +87,7 @@
         <MODULEPATH id="juce_core" path="JuceLibraryCode/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
-    <XCODE_MAC targetFolder="Builds/MacOSX">
+    <XCODE_MAC targetFolder="Builds/MacOSX" smallIcon="On1c5m" bigIcon="On1c5m">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Instrument Browser"
                        headerPath="../../submodules/ismsnoop/library/include&#10;../../submodules/ismsnoop/submodules/rtw/include"
