@@ -13,5 +13,3 @@ Reaktor instrument browser, designed for working with Reaktor 6 blocks. It can b
 * If your block has a background image and still doesn't show up, it's probably a problem with the \*.ism parser. Please submit an issue!
 
 * Usually when NI releases a new version of Reaktor any new blocks created with that version will fail to parse, because the format of the \*.ism files changes slightly. In this case an update to the \*.ism parser is required. Please bug me until I do it (or do it yourself and submit a pull request ;) )
-
-* If your block doesn't show up at all it's not a problem with the block.
