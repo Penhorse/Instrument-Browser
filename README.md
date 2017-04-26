@@ -4,6 +4,14 @@ Reaktor instrument browser, designed for working with Reaktor 6 blocks. It can b
 
 ![ibrows 1 3 1](https://cloud.githubusercontent.com/assets/2492870/11008113/6352fb58-84c6-11e5-9803-f246b06846bd.png)
 
+## Usage
+
+* Paste your block library directories into the field on the options screen. On Windows the factory library is typically installed to ':\Users\Public\Documents\Reaktor Blocks\Library' and your user library is typically at ':\Users\YourName\Documents\Native Instruments\Reaktor 6\Library\Blocks'.
+
+* Start typing letters to filter the block list! The filter text will be matched against instrument names, and also the names of the subdirectories up to 3 levels above each instrument. For example, type "Euro Reakt" to list all of the Euro Reakt blocks, or "bento" for all the Bento blocks.
+
+* Click on a block to add it to the current ensemble.
+
 ## Information for block developers
 
 * If your block shows up without an icon it's because you didn't add a panel icon to the main instrument module.
